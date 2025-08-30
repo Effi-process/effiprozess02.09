@@ -486,6 +486,39 @@ async function loadHeaderLogo() {
   }
 }
 
+/* ===== LOAD AI ICON ===== */
+async function loadAIIcon() {
+  try {
+    const response = await fetch('./icon.json');
+    const iconData = await response.json();
+    
+    if (iconData.data_uri) {
+      // Replace the small document icon with the AI business icon
+      const iconContainer = document.getElementById('aiIconContainer');
+      if (iconContainer) {
+        // Clear existing SVG content
+        iconContainer.innerHTML = '';
+        
+        // Create new image element
+        const aiIconImg = document.createElement('img');
+        aiIconImg.src = iconData.data_uri;
+        aiIconImg.alt = iconData.alt || 'AI Business Icon';
+        aiIconImg.style.cssText = `
+          width: 280px;
+          height: 430px;
+          object-fit: contain;
+          opacity: 0.6;
+          filter: saturate(1.3) brightness(1.1);
+        `;
+        
+        iconContainer.appendChild(aiIconImg);
+      }
+    }
+  } catch (error) {
+    console.log('AI Icon could not be loaded:', error);
+  }
+}
+
 /* ===== INITIALIZATION ===== */
 document.addEventListener('DOMContentLoaded', () => {
   // Start loading animation
@@ -524,6 +557,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Load the header logo
   loadHeaderLogo();
+  
+  // Load the AI icon for slide 3
+  loadAIIcon();
 });
 
 // Utility function for header click
