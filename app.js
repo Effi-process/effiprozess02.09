@@ -35,12 +35,21 @@ function goToSlide(index) {
   currentSlide = clamp(index, 0, slides.length - 1);
 
   slides.forEach((el, i) => {
-    el.style.opacity = (i === currentSlide) ? '1' : '0';
-    el.style.zIndex  = (i === currentSlide) ? '100' : '1';
-    el.style.pointerEvents = (i === currentSlide) ? 'auto' : 'none';
-    el.style.transform = (i === currentSlide) ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.98)';
-    el.style.filter = (i === currentSlide) ? 'blur(0px)' : 'blur(1px)';
-    el.style.display = (i === currentSlide) ? 'flex' : 'none';
+    const isActive = (i === currentSlide);
+    
+    // Always display flex for smooth transitions
+    el.style.display = 'flex';
+    
+    // Use CSS classes instead of inline styles for transitions
+    if (isActive) {
+      el.classList.add('active');
+      el.style.zIndex = '100';
+      el.style.visibility = 'visible';
+    } else {
+      el.classList.remove('active');
+      el.style.zIndex = '1';  
+      el.style.visibility = 'hidden';
+    }
   });
   
   // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite, Probleme-Seite, Solutions-Seite und Calculator-Seite
@@ -113,79 +122,88 @@ function bindVerticalArrows(){
     }
   });
 
-  // Scroll-to-slide navigation system
-  let isTransitioning = false;
-  let scrollCooldown = false;
+  // Robust scroll-to-slide navigation system - ONE slide per scroll gesture
+  let isScrolling = false;
+  let lastScrollTime = 0;
+  const SCROLL_COOLDOWN = 1000; // Time between allowed navigations
+  const SCROLL_DEBOUNCE = 50;   // Group rapid scroll events together
   
   window.addEventListener('wheel', (e) => {
     e.preventDefault();
     
-    // Ignore if already transitioning or in cooldown
-    if (isTransitioning || scrollCooldown) return;
+    // Block all scrolling while in cooldown
+    if (isScrolling) return;
     
-    // Determine scroll direction
-    const deltaY = e.deltaY;
+    const now = Date.now();
     
-    if (deltaY > 0) {
+    // Group rapid scroll events together (debounce)
+    if (now - lastScrollTime < SCROLL_DEBOUNCE) return;
+    
+    // Set scrolling state immediately to prevent multiple triggers
+    isScrolling = true;
+    lastScrollTime = now;
+    
+    // Determine direction and navigate exactly like arrow keys
+    if (e.deltaY > 0) {
       // Scrolling down - go to next slide
       if (currentSlide < slides.length - 1) {
-        navigateToSlide(currentSlide + 1);
+        goToSlide(currentSlide + 1);
       }
-    } else if (deltaY < 0) {
-      // Scrolling up - go to previous slide
+    } else if (e.deltaY < 0) {
+      // Scrolling up - go to previous slide  
       if (currentSlide > 0) {
-        navigateToSlide(currentSlide - 1);
+        goToSlide(currentSlide - 1);
       }
     }
+    
+    // Reset scrolling state after cooldown
+    setTimeout(() => {
+      isScrolling = false;
+    }, SCROLL_COOLDOWN);
   }, { passive: false });
   
-  // Touch support for mobile
+  // Touch support for mobile - also ONE slide per gesture
   let touchStartY = 0;
+  let touchStartTime = 0;
+  let touchMoved = false;
   
   window.addEventListener('touchstart', (e) => {
+    if (isScrolling) return;
     touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+    touchMoved = false;
   }, { passive: true });
   
   window.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    
-    if (isTransitioning || scrollCooldown) return;
-    
-    const touchY = e.touches[0].clientY;
-    const deltaY = touchStartY - touchY;
-    
-    // Minimum swipe distance to trigger navigation
-    if (Math.abs(deltaY) > 50) {
-      if (deltaY > 0 && currentSlide < slides.length - 1) {
-        // Swiping up - go to next slide
-        navigateToSlide(currentSlide + 1);
-        touchStartY = touchY; // Reset to prevent multiple triggers
-      } else if (deltaY < 0 && currentSlide > 0) {
-        // Swiping down - go to previous slide
-        navigateToSlide(currentSlide - 1);
-        touchStartY = touchY; // Reset to prevent multiple triggers
-      }
-    }
+    touchMoved = true;
   }, { passive: false });
   
-  function navigateToSlide(targetSlide) {
-    if (isTransitioning || scrollCooldown) return;
+  window.addEventListener('touchend', (e) => {
+    if (isScrolling || !touchMoved) return;
     
-    isTransitioning = true;
-    scrollCooldown = true;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaY = touchStartY - touchEndY;
+    const touchDuration = Date.now() - touchStartTime;
     
-    goToSlide(targetSlide);
-    
-    // Allow next navigation after transition completes
-    setTimeout(() => {
-      isTransitioning = false;
-    }, 300); // Match slide transition duration
-    
-    // Cooldown period to prevent rapid scrolling
-    setTimeout(() => {
-      scrollCooldown = false;
-    }, 800); // Longer cooldown for smooth experience
-  }
+    // Only trigger on significant swipes (distance and not too slow)
+    if (Math.abs(deltaY) > 80 && touchDuration < 800) {
+      isScrolling = true;
+      
+      if (deltaY > 0 && currentSlide < slides.length - 1) {
+        // Swiping up - go to next slide
+        goToSlide(currentSlide + 1);
+      } else if (deltaY < 0 && currentSlide > 0) {
+        // Swiping down - go to previous slide
+        goToSlide(currentSlide - 1);
+      }
+      
+      // Same cooldown as wheel scrolling
+      setTimeout(() => {
+        isScrolling = false;
+      }, SCROLL_COOLDOWN);
+    }
+  }, { passive: true });
 }
 
 /* ===== SERVICES CAROUSEL ===== */
@@ -600,14 +618,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   refreshSlides();
 
-  // Anfangszustand für alle Slides
+  // Anfangszustand für alle Slides - use CSS classes for consistent transitions
   slides.forEach((el,i) => {
-    el.style.transition = 'all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1)';
-    el.style.opacity = i===0 ? '1' : '0';
-    el.style.zIndex  = i===0 ? '2' : '1';
-    el.style.pointerEvents = i===0 ? 'auto' : 'none';
-    el.style.transform = i===0 ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.98)';
-    el.style.filter = i===0 ? 'blur(0px)' : 'blur(1px)';
+    const isFirst = i === 0;
+    
+    // Always display flex for smooth transitions
+    el.style.display = 'flex';
+    
+    // Use CSS classes for transitions (defined in styles.css)
+    if (isFirst) {
+      el.classList.add('active');
+      el.style.zIndex = '100';
+      el.style.visibility = 'visible';
+    } else {
+      el.classList.remove('active');
+      el.style.zIndex = '1';
+      el.style.visibility = 'hidden';
+    }
   });
 
   // Carousel DOM holen (falls es existiert)
