@@ -113,10 +113,79 @@ function bindVerticalArrows(){
     }
   });
 
-  // Seite ist „one-pager" → native Scroll verhindern
-  ['wheel','touchmove'].forEach(evt =>
-    window.addEventListener(evt, e => e.preventDefault(), { passive:false })
-  );
+  // Scroll-to-slide navigation system
+  let isTransitioning = false;
+  let scrollCooldown = false;
+  
+  window.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    
+    // Ignore if already transitioning or in cooldown
+    if (isTransitioning || scrollCooldown) return;
+    
+    // Determine scroll direction
+    const deltaY = e.deltaY;
+    
+    if (deltaY > 0) {
+      // Scrolling down - go to next slide
+      if (currentSlide < slides.length - 1) {
+        navigateToSlide(currentSlide + 1);
+      }
+    } else if (deltaY < 0) {
+      // Scrolling up - go to previous slide
+      if (currentSlide > 0) {
+        navigateToSlide(currentSlide - 1);
+      }
+    }
+  }, { passive: false });
+  
+  // Touch support for mobile
+  let touchStartY = 0;
+  
+  window.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  
+  window.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    
+    if (isTransitioning || scrollCooldown) return;
+    
+    const touchY = e.touches[0].clientY;
+    const deltaY = touchStartY - touchY;
+    
+    // Minimum swipe distance to trigger navigation
+    if (Math.abs(deltaY) > 50) {
+      if (deltaY > 0 && currentSlide < slides.length - 1) {
+        // Swiping up - go to next slide
+        navigateToSlide(currentSlide + 1);
+        touchStartY = touchY; // Reset to prevent multiple triggers
+      } else if (deltaY < 0 && currentSlide > 0) {
+        // Swiping down - go to previous slide
+        navigateToSlide(currentSlide - 1);
+        touchStartY = touchY; // Reset to prevent multiple triggers
+      }
+    }
+  }, { passive: false });
+  
+  function navigateToSlide(targetSlide) {
+    if (isTransitioning || scrollCooldown) return;
+    
+    isTransitioning = true;
+    scrollCooldown = true;
+    
+    goToSlide(targetSlide);
+    
+    // Allow next navigation after transition completes
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 300); // Match slide transition duration
+    
+    // Cooldown period to prevent rapid scrolling
+    setTimeout(() => {
+      scrollCooldown = false;
+    }, 800); // Longer cooldown for smooth experience
+  }
 }
 
 /* ===== SERVICES CAROUSEL ===== */
