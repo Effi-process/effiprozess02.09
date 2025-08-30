@@ -27,9 +27,8 @@ function isDarkSlide(i) {
 function goToSlide(index) {
   if (!slides.length) refreshSlides();
   
-  // Navigation zur Ultrathink-Seite, wenn über das Ende hinaus navigiert wird
+  // Prevent navigation beyond last slide
   if (index >= slides.length) {
-    window.location.href = 'ultrathink.html';
     return;
   }
   
@@ -43,7 +42,7 @@ function goToSlide(index) {
     el.style.filter = (i === currentSlide) ? 'blur(0px)' : 'blur(1px)';
   });
   
-  // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite und Probleme-Seite
+  // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite, Probleme-Seite und Solutions-Seite
   const canvas = document.getElementById('dotAnimation');
   if (canvas) {
     canvas.style.display = (currentSlide === 2 || currentSlide === 3 || currentSlide === 4) ? 'none' : 'block';
@@ -54,9 +53,15 @@ function goToSlide(index) {
   const logo = document.querySelector('.header-logo');
   const dark = isDarkSlide(currentSlide);
 
-  header.style.backgroundColor = dark ? '#000000' : '#ffffff';
-  header.style.borderBottomColor = dark ? '#333' : '#cccccc';
-  logo.style.color = dark ? '#ffffff' : '#808080';
+  // Hide header on slide 5 (solutions page), show on all others  
+  if (currentSlide === 4) { // Slide 5 has index 4 (0-based)
+    header.style.display = 'none';
+  } else {
+    header.style.display = 'block';
+    header.style.backgroundColor = dark ? '#000000' : '#ffffff';
+    header.style.borderBottomColor = dark ? '#333' : '#cccccc';
+    if (logo) logo.style.color = dark ? '#ffffff' : '#808080';
+  }
 
   updateVerticalArrows();
 }
