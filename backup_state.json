@@ -1,0 +1,44 @@
+{
+  "description": "Backup des aktuellen Stands - Lila Blasen-Animation mit zentriertem Text",
+  "timestamp": "2025-08-27",
+  "features": {
+    "animation": {
+      "type": "organic_bubble",
+      "points": 5000,
+      "colors": "purple gradient to white",
+      "movement": "slow wave patterns",
+      "speed": "0.0002",
+      "mouse_interaction": "minimal (30px radius, force 1)"
+    },
+    "text": {
+      "main_text": "We build modern websites, intelligent user interfaces and AI-powered automation",
+      "position": "center of first section (45% from top)",
+      "color": "#808080",
+      "font_size": "1.5rem"
+    },
+    "header": {
+      "logo": "Effiprocess",
+      "position": "top left in header",
+      "color": "#808080",
+      "font_size": "1.4rem"
+    },
+    "layout": {
+      "sections": 7,
+      "scroll_type": "smooth",
+      "background": "white"
+    }
+  },
+  "files": {
+    "index.html": "Main HTML structure",
+    "styles.css": "CSS with purple animation and gray text", 
+    "animation.js": "OrganicBubbleAnimation class with 5000 points",
+    "sheet.md": "Design guidelines document"
+  },
+  "animation_details": {
+    "bubble_creation": "fibonacci spiral distribution",
+    "wave_patterns": "mainWave + secondWave + globalPulse",
+    "color_gradient": "dark purple outside to white near text",
+    "text_protection": "120% maxDistance brightness area",
+    "3d_effects": "perspective with phi/theta coordinates"
+  }
+}

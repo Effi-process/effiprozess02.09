@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Effiprocess</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <!-- Logo wird durch Animation ersetzt -->
+      </div>
+      <div class="loading-progress">
+        <div class="progress-number" id="progressNumber">0</div>
+        <div class="progress-label">LOADING</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="quality-text">QUALITY IS OUR STANDARD</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas für Bubble Animation -->
+  <canvas id="dotAnimation" class="dot-canvas"></canvas>
+
+  <!-- Vertikale Pfeile für Slides -->
+  <div class="nav-vertical" id="navVertical">
+    <button class="arrow up" data-action="prev" aria-label="Vorheriger Bereich">▲</button>
+    <button class="arrow down" data-action="next" aria-label="Nächster Bereich">▼</button>
+  </div>
+
+  <!-- Fixed Header -->
+  <header class="header">
+    <h1 class="header-logo" onclick="goToHome()">Effiprocess</h1>
+  </header>
+
+  <!-- Vollbild-Slides -->
+  <main id="slides">
+    <!-- SLIDE 0: HERO -->
+    <section class="slide hero" data-slide="0">
+      <div class="hero-text-container">
+        <h2 class="hero-main-text">
+          Modern websites, intuitive interfaces, and AI agents—<br/>
+          engineered as one system.<br/><br/>
+          We turn digital touchpoints into measurable growth and higher conversion.<br/>
+          Automate workflows end-to-end to lower costs and accelerate delivery.<br/><br/>
+          Secure, GDPR-compliant, and seamlessly integrated with your stack.<br/><br/>
+          The result: a scalable, on-brand customer experience that converts.
+        </h2>
+      </div>
+    </section>
+
+    <!-- SLIDE 1: SERVICES -->
+    <section class="slide services" data-slide="1">
+      <div class="services-container">
+        <!-- Services Page -->
+        <div class="services-page" id="services-page-0" style="opacity: 1;">
+          <div class="services-content-grid">
+            
+            <!-- Left side: Text content -->
+            <div class="services-text-section">
+              <div class="services-category">OUR EXPERTISE</div>
+              <h3 class="services-headline">Modern websites that drive<br/>your business forward.</h3>
+              <p class="services-description">
+                We create responsive, high-performance websites with cutting-edge technologies. 
+                From concept to deployment, we ensure your digital presence stands out with 
+                seamless user experiences and powerful backend solutions.
+              </p>
+              
+              <!-- Enhanced features grid -->
+              <div class="services-features-grid">
+                <div class="feature-card">
+                  <div class="feature-icon">
+                    <div class="icon-circle">P</div>
+                  </div>
+                  <div class="feature-content">
+                    <div class="feature-title">Performance First</div>
+                    <div class="feature-desc">Lightning-fast loading times and optimized user experiences</div>
+                  </div>
+                </div>
+                <div class="feature-card">
+                  <div class="feature-icon">
+                    <div class="icon-circle">R</div>
+                  </div>
+                  <div class="feature-content">
+                    <div class="feature-title">Responsive Design</div>
+                    <div class="feature-desc">Perfect display across all devices and screen sizes</div>
+                  </div>
+                </div>
+                <div class="feature-card">
+                  <div class="feature-icon">
+                    <div class="icon-circle">S</div>
+                  </div>
+                  <div class="feature-content">
+                    <div class="feature-title">SEO Optimized</div>
+                    <div class="feature-desc">Built for search engines and maximum visibility</div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Technology stack -->
+              <div class="tech-stack">
+                <div class="tech-label">Technologies we use:</div>
+                <div class="tech-tags">
+                  <span class="tech-tag">React</span>
+                  <span class="tech-tag">Next.js</span>
+                  <span class="tech-tag">TypeScript</span>
+                  <span class="tech-tag">Tailwind</span>
+                  <span class="tech-tag">Node.js</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Right side: Browser illustration -->
+            <div class="services-visual-section">
+              <!-- Geometric background elements -->
+              <div class="geometric-shape shape-1"></div>
+              <div class="geometric-shape shape-2"></div>
+              <div class="geometric-shape shape-3"></div>
+              <div class="geometric-shape shape-4"></div>
+              
+              <!-- Browser illustration -->
+              <div class="browser-illustration">
+                <svg viewBox="0 0 400 280" class="browser-svg">
+                  <!-- Browser window -->
+                  <rect x="20" y="20" width="360" height="240" rx="16" fill="white" stroke="#a078c8" stroke-width="3"/>
+                  
+                  <!-- Browser top bar -->
+                  <rect x="20" y="20" width="360" height="50" rx="16" fill="#a078c8"/>
+                  <rect x="25" y="65" width="350" height="190" rx="8" fill="#f8f9fa"/>
+                  
+                  <!-- Traffic lights -->
+                  <circle cx="45" cy="45" r="7" fill="#ff5f5f"/>
+                  <circle cx="70" cy="45" r="7" fill="#ffbd2e"/>  
+                  <circle cx="95" cy="45" r="7" fill="#27ca3f"/>
+                  
+                  <!-- Search bar -->
+                  <rect x="150" y="35" width="180" height="20" rx="10" fill="white" stroke="#8a6fb8" stroke-width="1"/>
+                  <circle cx="320" cy="45" r="8" fill="none" stroke="#8a6fb8" stroke-width="2"/>
+                  
+                  <!-- Plus button -->
+                  <text x="355" y="52" font-size="18" fill="white" text-anchor="middle">+</text>
+                  
+                  <!-- Content area -->
+                  <rect x="45" y="85" width="200" height="8" rx="4" fill="#a078c8"/>
+                  <rect x="45" y="105" width="160" height="8" rx="4" fill="#a078c8"/>
+                  <rect x="45" y="125" width="180" height="8" rx="4" fill="#c8a0d8"/>
+                  
+                  <!-- Sidebar -->
+                  <rect x="280" y="85" width="80" height="80" rx="8" fill="#e8e0f0"/>
+                  <rect x="290" y="95" width="60" height="6" rx="3" fill="#a078c8"/>
+                  <rect x="290" y="110" width="45" height="6" rx="3" fill="#a078c8"/>
+                  <rect x="290" y="125" width="55" height="6" rx="3" fill="#a078c8"/>
+                  
+                  <!-- Bottom elements -->
+                  <rect x="45" y="180" width="120" height="50" rx="8" fill="#f0e8ff"/>
+                  <rect x="180" y="180" width="120" height="50" rx="8" fill="#f0e8ff"/>
+                </svg>
+              </div>
+              
+              <!-- Page number -->
+              <div class="page-number">01/03</div>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- SLIDE 2: INTERFACE -->
+    <section class="slide" data-slide="2" style="background: #ffffff !important; z-index: 999 !important; display: flex !important;">
+      <!-- Left side: Large number -->
+      <div style="width: 180px; display: flex; align-items: center; justify-content: center; z-index: 1000;">
+        <div style="font-size: 5rem; font-weight: 300; color: #9a9a9a; transform: rotate(-90deg); white-space: nowrap; font-family: 'SF Mono', Monaco, monospace;">2/03</div>
+      </div>
+      
+      <!-- Main content area -->
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 40px 0 60px; z-index: 1000;">
+        <div style="max-width: 520px;">
+          <div style="font-size: 0.9rem; color: #9a9a9a; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 30px;">Our personal commitment</div>
+          <h2 style="font-size: 3.2rem; font-weight: 300; color: #333333; line-height: 1.15; margin-bottom: 40px; letter-spacing: -0.02em;">
+            At its heart, interface isn't<br/>
+            about structures.<br/>
+            It's about people.
+          </h2>
+          
+          <div style="font-size: 1rem; color: #666666; line-height: 1.65; margin-bottom: 50px; max-width: 460px;">
+            <p>
+              We strive to go above and beyond for our clients, fostering a relationship built on 
+              trust, confidence and honesty. Maybe it's our family orientation, but we think the 
+              most satisfying part of what we do is that we get to work with so many wonderful 
+              people. We're proud that we're a 100% women-owned business certified by the 
+              Women's Business Development Center (WBDC). We're also proud that we put 
+              people first, with monthly reward programs and team-building activities throughout 
+              the year.
+            </p>
+          </div>
+          
+          <div style="margin-top: 20px;">
+            <div style="font-size: 0.8rem; color: #9a9a9a; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500; cursor: pointer; position: relative;">
+              DISCOVER MORE ABOUT OUR PERSONAL COMMITMENT
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Background visual with Large Interface Icon on the right -->
+      <div style="position: absolute; top: 0; right: 0; width: 60%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(to left, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.8) 100%), linear-gradient(135deg, #f8f9fa 0%, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%, #f8f9fa 100%); z-index: 1;">
+        <!-- Extra Large Interface Icon -->
+        <div style="opacity: 0.15; filter: drop-shadow(0 20px 60px rgba(160, 120, 200, 0.3)); transform: scale(1.2);">
+          <svg viewBox="0 0 400 300" style="width: 450px; height: 340px;">
+            <!-- Browser Window -->
+            <rect x="30" y="30" width="340" height="240" rx="20" fill="white" stroke="#a078c8" stroke-width="5"/>
+            
+            <!-- Browser Top Bar -->
+            <rect x="30" y="30" width="340" height="50" rx="20" fill="#a078c8"/>
+            <rect x="35" y="75" width="330" height="190" rx="12" fill="#f8f9fa"/>
+            
+            <!-- Traffic Lights -->
+            <circle cx="340" cy="55" r="6" fill="white" opacity="0.8"/>
+            <circle cx="320" cy="55" r="6" fill="white" opacity="0.8"/>
+            <circle cx="300" cy="55" r="6" fill="white" opacity="0.8"/>
+            
+            <!-- Search Bars -->
+            <rect x="55" y="100" width="280" height="20" rx="10" fill="white" stroke="#a078c8" stroke-width="3"/>
+            <rect x="55" y="135" width="280" height="20" rx="10" fill="white" stroke="#a078c8" stroke-width="3"/>
+            
+            <!-- Search Icon -->
+            <circle cx="75" cy="145" r="6" fill="none" stroke="#a078c8" stroke-width="3"/>
+            <text x="75" y="150" font-size="8" fill="#a078c8" text-anchor="middle" font-weight="bold">Q</text>
+            
+            <!-- UI Elements -->
+            <rect x="55" y="180" width="35" height="20" rx="4" fill="#a078c8"/>
+            <rect x="100" y="180" width="35" height="20" rx="4" fill="#a078c8"/>
+            <rect x="145" y="180" width="35" height="20" rx="4" fill="#a078c8"/>
+            <rect x="190" y="180" width="35" height="20" rx="4" fill="#a078c8"/>
+            
+            <!-- Plus icon -->
+            <line x1="112" y1="188" x2="123" y2="188" stroke="white" stroke-width="2"/>
+            <line x1="117.5" y1="183" x2="117.5" y2="193" stroke="white" stroke-width="2"/>
+            
+            <!-- Menu lines -->
+            <line x1="155" y1="186" x2="170" y2="186" stroke="white" stroke-width="1.5"/>
+            <line x1="155" y1="190" x2="170" y2="190" stroke="white" stroke-width="1.5"/>
+            <line x1="155" y1="194" x2="170" y2="194" stroke="white" stroke-width="1.5"/>
+            
+            <!-- Grid dots -->
+            <circle cx="200" cy="186" r="1.5" fill="white"/>
+            <circle cx="208" cy="186" r="1.5" fill="white"/>
+            <circle cx="216" cy="186" r="1.5" fill="white"/>
+            <circle cx="200" cy="190" r="1.5" fill="white"/>
+            <circle cx="208" cy="190" r="1.5" fill="white"/>
+            <circle cx="216" cy="190" r="1.5" fill="white"/>
+            <circle cx="200" cy="194" r="1.5" fill="white"/>
+            <circle cx="208" cy="194" r="1.5" fill="white"/>
+            <circle cx="216" cy="194" r="1.5" fill="white"/>
+            
+            <!-- Content blocks -->
+            <rect x="55" y="220" width="120" height="30" rx="6" fill="#e8e0f0" opacity="0.6"/>
+            <rect x="190" y="220" width="120" height="30" rx="6" fill="#e8e0f0" opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
