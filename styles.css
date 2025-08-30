@@ -69,10 +69,11 @@ body {
 }
 
 .progress-number {
-  font-size: 4rem;
+  font-size: 1.5rem;
   font-weight: 300;
   color: #999;
-  margin-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 0px;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
 }
 
