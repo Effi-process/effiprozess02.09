@@ -40,6 +40,7 @@ function goToSlide(index) {
     el.style.pointerEvents = (i === currentSlide) ? 'auto' : 'none';
     el.style.transform = (i === currentSlide) ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.98)';
     el.style.filter = (i === currentSlide) ? 'blur(0px)' : 'blur(1px)';
+    el.style.display = (i === currentSlide) ? 'flex' : 'none';
   });
   
   // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite, Probleme-Seite, Solutions-Seite und Calculator-Seite
@@ -62,6 +63,20 @@ function goToSlide(index) {
     header.style.borderBottomColor = dark ? '#333' : '#cccccc';
     if (logo) logo.style.color = dark ? '#ffffff' : '#808080';
   }
+
+  // Hide all select dropdowns when changing slides
+  const selectElements = document.querySelectorAll('select');
+  selectElements.forEach(select => {
+    if (select.parentElement) {
+      const parentSlide = select.closest('.slide');
+      if (parentSlide) {
+        const slideIndex = Array.from(slides).indexOf(parentSlide);
+        if (slideIndex !== currentSlide) {
+          select.blur(); // Close any open dropdowns
+        }
+      }
+    }
+  });
 
   updateVerticalArrows();
 }
@@ -446,6 +461,31 @@ function completeLoading() {
   }
 }
 
+/* ===== LOAD LOGO ===== */
+async function loadHeaderLogo() {
+  try {
+    const response = await fetch('./ep_logo.json');
+    const logoData = await response.json();
+    
+    if (logoData.data_uri) {
+      const logoContainer = document.getElementById('headerLogoContainer');
+      if (logoContainer) {
+        const logoImg = document.createElement('img');
+        logoImg.src = logoData.data_uri;
+        logoImg.alt = 'Effiprocess Logo';
+        logoImg.className = 'header-logo-image';
+        logoImg.width = 56;
+        logoImg.height = 56;
+        logoImg.style.width = '56px';
+        logoImg.style.height = '56px';
+        logoContainer.appendChild(logoImg);
+      }
+    }
+  } catch (error) {
+    console.log('Logo could not be loaded:', error);
+  }
+}
+
 /* ===== INITIALIZATION ===== */
 document.addEventListener('DOMContentLoaded', () => {
   // Start loading animation
@@ -481,6 +521,9 @@ document.addEventListener('DOMContentLoaded', () => {
   updateProblemsArrows();
 
   bubbleAnimation = new OrganicBubbleAnimation();
+  
+  // Load the header logo
+  loadHeaderLogo();
 });
 
 // Utility function for header click

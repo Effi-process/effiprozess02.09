@@ -132,6 +132,9 @@ body {
   left: 0;
   right: 0;
   z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .header-logo {
@@ -147,6 +150,37 @@ body {
 
 .header-logo:hover {
   color: #a078c8;
+}
+
+/* Header Logo Container */
+.header-logo-container {
+  height: 56px;
+  width: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.header-logo-container:hover {
+  transform: scale(1.1);
+}
+
+.header-logo-image {
+  width: 56px !important;
+  height: 56px !important;
+  max-height: 56px !important;
+  max-width: 56px !important;
+  object-fit: contain;
+  filter: opacity(0.9);
+  transition: filter 0.3s ease;
+  border-radius: 6px;
+}
+
+.header-logo-image:hover {
+  filter: opacity(1);
+  transform: scale(1.05);
 }
 
 /* Vollbild-Slides */
