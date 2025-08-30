@@ -164,7 +164,7 @@
               </div>
               
               <!-- Page number -->
-              <div class="page-number">01/03</div>
+              <div class="page-number">01/04</div>
             </div>
             
           </div>
@@ -175,13 +175,65 @@
 
     <!-- SLIDE 2: INTERFACE -->
     <section class="slide" data-slide="2" style="background: #ffffff !important; z-index: 999 !important; display: flex !important;">
-      <!-- Left side: Large number -->
-      <div style="width: 180px; display: flex; align-items: center; justify-content: center; z-index: 1000;">
-        <div style="font-size: 5rem; font-weight: 300; color: #9a9a9a; transform: rotate(-90deg); white-space: nowrap; font-family: 'SF Mono', Monaco, monospace;">2/03</div>
+      <!-- Background visual with Large Interface Icon on the left -->
+      <div style="position: absolute; top: 0; left: 180px; width: 40%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(to right, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.9) 100%), linear-gradient(135deg, #f8f9fa 0%, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%, #f8f9fa 100%); z-index: 1;">
+        <!-- Extra Large Interface Icon -->
+        <div style="opacity: 0.12; filter: drop-shadow(0 20px 60px rgba(160, 120, 200, 0.2)); transform: scale(1.1);">
+          <svg viewBox="0 0 400 300" style="width: 380px; height: 285px;">
+            <!-- Browser Window -->
+            <rect x="30" y="30" width="340" height="240" rx="20" fill="white" stroke="#a078c8" stroke-width="4"/>
+            
+            <!-- Browser Top Bar -->
+            <rect x="30" y="30" width="340" height="50" rx="20" fill="#a078c8"/>
+            <rect x="35" y="75" width="330" height="190" rx="12" fill="#f8f9fa"/>
+            
+            <!-- Traffic Lights -->
+            <circle cx="340" cy="55" r="5" fill="white" opacity="0.7"/>
+            <circle cx="320" cy="55" r="5" fill="white" opacity="0.7"/>
+            <circle cx="300" cy="55" r="5" fill="white" opacity="0.7"/>
+            
+            <!-- Search Bars -->
+            <rect x="55" y="100" width="280" height="18" rx="9" fill="white" stroke="#a078c8" stroke-width="2"/>
+            <rect x="55" y="130" width="280" height="18" rx="9" fill="white" stroke="#a078c8" stroke-width="2"/>
+            
+            <!-- Search Icon -->
+            <circle cx="75" cy="139" r="5" fill="none" stroke="#a078c8" stroke-width="2"/>
+            
+            <!-- UI Elements -->
+            <rect x="55" y="170" width="32" height="18" rx="3" fill="#a078c8"/>
+            <rect x="95" y="170" width="32" height="18" rx="3" fill="#a078c8"/>
+            <rect x="135" y="170" width="32" height="18" rx="3" fill="#a078c8"/>
+            <rect x="175" y="170" width="32" height="18" rx="3" fill="#a078c8"/>
+            
+            <!-- Plus icon -->
+            <line x1="107" y1="179" x2="117" y2="179" stroke="white" stroke-width="1.5"/>
+            <line x1="112" y1="174" x2="112" y2="184" stroke="white" stroke-width="1.5"/>
+            
+            <!-- Menu lines -->
+            <line x1="145" y1="176" x2="157" y2="176" stroke="white" stroke-width="1"/>
+            <line x1="145" y1="179" x2="157" y2="179" stroke="white" stroke-width="1"/>
+            <line x1="145" y1="182" x2="157" y2="182" stroke="white" stroke-width="1"/>
+            
+            <!-- Grid dots -->
+            <circle cx="185" cy="176" r="1" fill="white"/>
+            <circle cx="191" cy="176" r="1" fill="white"/>
+            <circle cx="197" cy="176" r="1" fill="white"/>
+            <circle cx="185" cy="179" r="1" fill="white"/>
+            <circle cx="191" cy="179" r="1" fill="white"/>
+            <circle cx="197" cy="179" r="1" fill="white"/>
+            <circle cx="185" cy="182" r="1" fill="white"/>
+            <circle cx="191" cy="182" r="1" fill="white"/>
+            <circle cx="197" cy="182" r="1" fill="white"/>
+            
+            <!-- Content blocks -->
+            <rect x="55" y="210" width="110" height="25" rx="5" fill="#e8e0f0" opacity="0.5"/>
+            <rect x="175" y="210" width="110" height="25" rx="5" fill="#e8e0f0" opacity="0.5"/>
+          </svg>
+        </div>
       </div>
       
-      <!-- Main content area -->
-      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 40px 0 60px; z-index: 1000;">
+      <!-- Main content area on the right -->
+      <div style="position: absolute; right: 0; top: 0; width: 45%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 100px 0 40px; z-index: 1000;">
         <div style="max-width: 520px;">
           <div style="font-size: 0.9rem; color: #9a9a9a; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 30px;">Our personal commitment</div>
           <h2 style="font-size: 3.2rem; font-weight: 300; color: #333333; line-height: 1.15; margin-bottom: 40px; letter-spacing: -0.02em;">
@@ -210,60 +262,173 @@
         </div>
       </div>
       
-      <!-- Background visual with Large Interface Icon on the right -->
-      <div style="position: absolute; top: 0; right: 0; width: 60%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(to left, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.8) 100%), linear-gradient(135deg, #f8f9fa 0%, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%, #f8f9fa 100%); z-index: 1;">
-        <!-- Extra Large Interface Icon -->
-        <div style="opacity: 0.15; filter: drop-shadow(0 20px 60px rgba(160, 120, 200, 0.3)); transform: scale(1.2);">
-          <svg viewBox="0 0 400 300" style="width: 450px; height: 340px;">
-            <!-- Browser Window -->
-            <rect x="30" y="30" width="340" height="240" rx="20" fill="white" stroke="#a078c8" stroke-width="5"/>
+      <!-- Left side: Large number -->
+      <div style="position: absolute; left: 0; top: 0; width: 180px; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 1000;">
+        <div style="font-size: 5rem; font-weight: 300; color: #a078c8; transform: rotate(-90deg); white-space: nowrap; font-family: 'SF Mono', Monaco, monospace;">02/04</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: AI AGENT SYSTEM -->
+    <section class="slide" data-slide="3" style="background: #ffffff !important; z-index: 999 !important; display: flex !important;">      
+      <!-- Main content area on the left -->
+      <div style="position: absolute; left: 0; top: 0; width: 55%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 60px 0 80px; z-index: 1000;">
+        <div style="max-width: 520px;">
+          <div style="font-size: 0.9rem; color: #9a9a9a; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 30px;">AI Agent Systems</div>
+          <h2 style="font-size: 3.2rem; font-weight: 300; color: #333333; line-height: 1.15; margin-bottom: 40px; letter-spacing: -0.02em;">
+            Intelligent automation<br/>
+            that thinks and acts<br/>
+            like your best employee.
+          </h2>
+          
+          <div style="font-size: 1rem; color: #666666; line-height: 1.65; margin-bottom: 50px; max-width: 460px;">
+            <p>
+              Our AI agents don't just follow scripts—they understand context, make decisions, 
+              and adapt to your business needs. From customer service to data analysis, 
+              they work 24/7 to streamline your operations while maintaining the human touch 
+              your customers expect. Smart automation that grows with your business.
+            </p>
+          </div>
+          
+          <div style="margin-top: 20px; margin-bottom: 40px;">
+            <div style="font-size: 0.8rem; color: #9a9a9a; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500; cursor: pointer; position: relative;">
+              DISCOVER OUR AI AGENT SOLUTIONS
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+      <!-- Bottom: Large number -->
+      <div style="position: absolute; right: 20px; bottom: 20px; z-index: 1000;">
+        <div style="font-size: 3rem; font-weight: 300; color: #a078c8; font-family: 'SF Mono', Monaco, monospace;">03/04</div>
+      </div>
+      
+      <!-- Large Brain Icon in background -->
+      <div style="position: absolute; top: 0; right: 0; width: 45%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 1;">
+        <div style="opacity: 0.12; filter: drop-shadow(0 15px 40px rgba(160, 120, 200, 0.15)); transform: scale(1.1);">
+          <svg viewBox="0 0 300 240" style="width: 400px; height: 320px;">
+            <!-- Brain exactly like your reference image -->
+            <g fill="none" stroke="#a078c8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Left Brain Hemisphere with correct curves -->
+              <path d="M80 120 C65 105, 65 85, 75 70 C85 60, 100 55, 115 65 C125 55, 135 60, 140 70 C145 85, 145 105, 130 120 C145 135, 145 155, 140 170 C135 180, 125 185, 115 175 C100 185, 85 180, 75 170 C65 155, 65 135, 80 120"/>
+              
+              <!-- Left hemisphere inner brain folds -->
+              <path d="M90 85 C100 80, 110 85, 120 90 C115 100, 110 110, 105 120"/>
+              <path d="M85 100 C95 95, 105 100, 115 105 C110 115, 105 125, 100 135"/>
+              <path d="M90 130 C100 125, 110 130, 120 135 C115 145, 110 155, 105 165"/>
+              <path d="M95 150 C105 145, 115 150, 125 155"/>
+              
+              <!-- Right Brain Hemisphere with correct curves -->
+              <path d="M220 120 C235 105, 235 85, 225 70 C215 60, 200 55, 185 65 C175 55, 165 60, 160 70 C155 85, 155 105, 170 120 C155 135, 155 155, 160 170 C165 180, 175 185, 185 175 C200 185, 215 180, 225 170 C235 155, 235 135, 220 120"/>
+              
+              <!-- Right hemisphere inner brain folds -->
+              <path d="M210 85 C200 80, 190 85, 180 90 C185 100, 190 110, 195 120"/>
+              <path d="M215 100 C205 95, 195 100, 185 105 C190 115, 195 125, 200 135"/>
+              <path d="M210 130 C200 125, 190 130, 180 135 C185 145, 190 155, 195 165"/>
+              <path d="M205 150 C195 145, 185 150, 175 155"/>
+              
+              <!-- Central brain division -->
+              <path d="M150 65 C150 85, 150 105, 150 120 C150 135, 150 155, 150 175"/>
+            </g>
             
-            <!-- Browser Top Bar -->
-            <rect x="30" y="30" width="340" height="50" rx="20" fill="#a078c8"/>
-            <rect x="35" y="75" width="330" height="190" rx="12" fill="#f8f9fa"/>
+            <!-- Corner squares exactly like in image -->
+            <g fill="none" stroke="#a078c8" stroke-width="8" opacity="0.6">
+              <rect x="20" y="20" width="40" height="40" rx="8"/>
+              <rect x="240" y="20" width="40" height="40" rx="8"/>
+              <rect x="20" y="180" width="40" height="40" rx="8"/>
+              <rect x="240" y="180" width="40" height="40" rx="8"/>
+            </g>
             
-            <!-- Traffic Lights -->
-            <circle cx="340" cy="55" r="6" fill="white" opacity="0.8"/>
-            <circle cx="320" cy="55" r="6" fill="white" opacity="0.8"/>
-            <circle cx="300" cy="55" r="6" fill="white" opacity="0.8"/>
+            <!-- Dashed connection lines exactly like in image -->
+            <g stroke="#a078c8" stroke-width="5" stroke-dasharray="10,6" opacity="0.5">
+              <line x1="60" y1="40" x2="85" y2="75"/>
+              <line x1="240" y1="40" x2="215" y2="75"/>
+              <line x1="60" y1="200" x2="85" y2="165"/>
+              <line x1="240" y1="200" x2="215" y2="165"/>
+            </g>
             
-            <!-- Search Bars -->
-            <rect x="55" y="100" width="280" height="20" rx="10" fill="white" stroke="#a078c8" stroke-width="3"/>
-            <rect x="55" y="135" width="280" height="20" rx="10" fill="white" stroke="#a078c8" stroke-width="3"/>
+            <!-- Corner bracket elements like in your image -->
+            <g stroke="#a078c8" stroke-width="4" opacity="0.4">
+              <!-- Top left -->
+              <path d="M75 25 L85 25 M75 30 L85 30"/>
+              <path d="M25 65 L25 75 M30 65 L30 75"/>
+              <!-- Top right -->
+              <path d="M255 25 L245 25 M255 30 L245 30"/>
+              <path d="M275 65 L275 75 M270 65 L270 75"/>
+              <!-- Bottom left -->
+              <path d="M75 215 L85 215 M75 210 L85 210"/>
+              <path d="M25 175 L25 165 M30 175 L30 165"/>
+              <!-- Bottom right -->
+              <path d="M255 215 L245 215 M255 210 L245 210"/>
+              <path d="M275 175 L275 165 M270 175 L270 165"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: MÖGLICHE PROBLEME -->
+    <section class="slide" data-slide="4" style="background: #f5f5f5 !important; z-index: 999 !important; display: flex !important;">
+      <!-- Left side: Large number -->
+      <div style="position: absolute; left: 0; top: 0; width: 180px; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 1000;">
+        <div style="font-size: 5rem; font-weight: 300; color: #666; transform: rotate(-90deg); white-space: nowrap; font-family: 'SF Mono', Monaco, monospace;">04/04</div>
+      </div>
+      
+      <!-- Main content area -->
+      <div style="position: absolute; right: 0; top: 0; width: 45%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 100px 0 40px; z-index: 1000;">
+        <div style="max-width: 520px;">
+          <div style="font-size: 0.9rem; color: #888; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 30px;">Mögliche Probleme</div>
+          <h2 style="font-size: 3.2rem; font-weight: 300; color: #333333; line-height: 1.15; margin-bottom: 40px; letter-spacing: -0.02em;">
+            Herausforderungen<br/>
+            die auftreten können<br/>
+            in digitalen Projekten.
+          </h2>
+          
+          <div style="font-size: 1rem; color: #555; line-height: 1.65; margin-bottom: 50px; max-width: 460px;">
+            <p>
+              Jedes digitale Projekt bringt spezifische Herausforderungen mit sich. 
+              Technische Komplexitäten, sich ändernde Anforderungen, Zeitdruck 
+              und Budgetbeschränkungen können den Projekterfolg gefährden. 
+              Es ist wichtig, diese Risiken zu verstehen und frühzeitig zu erkennen.
+            </p>
+          </div>
+          
+          <div style="margin-top: 20px;">
+            <div style="font-size: 0.8rem; color: #888; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500; cursor: pointer; position: relative;">
+              MEHR ÜBER TYPISCHE PROJEKTRISIKEN
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Background visual area -->
+      <div style="position: absolute; top: 0; left: 180px; width: 40%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(to right, rgba(245,245,245,0.1) 0%, rgba(245,245,245,0.9) 100%), linear-gradient(135deg, #e8e8e8 0%, #ddd 25%, #d0d0d0 50%, #ddd 75%, #e8e8e8 100%); z-index: 1;">
+        <!-- Clear Purple Warning Icon -->
+        <div style="opacity: 0.8; filter: drop-shadow(0 0 20px rgba(160, 120, 200, 0.6)) drop-shadow(0 0 40px rgba(160, 120, 200, 0.4)); transform: scale(1.3);">
+          <svg viewBox="0 0 200 200" style="width: 350px; height: 350px;">
+            <defs>
+              <!-- Reduced Glow Filter for clarity -->
+              <filter id="clearPurpleGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                <feMerge> 
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
             
-            <!-- Search Icon -->
-            <circle cx="75" cy="145" r="6" fill="none" stroke="#a078c8" stroke-width="3"/>
-            <text x="75" y="150" font-size="8" fill="#a078c8" text-anchor="middle" font-weight="bold">Q</text>
+            <!-- Warning Triangle - Clear Purple outline -->
+            <g fill="none" stroke="#a078c8" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" filter="url(#clearPurpleGlow)">
+              <path d="M100 30 L170 150 L30 150 Z"/>
+            </g>
             
-            <!-- UI Elements -->
-            <rect x="55" y="180" width="35" height="20" rx="4" fill="#a078c8"/>
-            <rect x="100" y="180" width="35" height="20" rx="4" fill="#a078c8"/>
-            <rect x="145" y="180" width="35" height="20" rx="4" fill="#a078c8"/>
-            <rect x="190" y="180" width="35" height="20" rx="4" fill="#a078c8"/>
-            
-            <!-- Plus icon -->
-            <line x1="112" y1="188" x2="123" y2="188" stroke="white" stroke-width="2"/>
-            <line x1="117.5" y1="183" x2="117.5" y2="193" stroke="white" stroke-width="2"/>
-            
-            <!-- Menu lines -->
-            <line x1="155" y1="186" x2="170" y2="186" stroke="white" stroke-width="1.5"/>
-            <line x1="155" y1="190" x2="170" y2="190" stroke="white" stroke-width="1.5"/>
-            <line x1="155" y1="194" x2="170" y2="194" stroke="white" stroke-width="1.5"/>
-            
-            <!-- Grid dots -->
-            <circle cx="200" cy="186" r="1.5" fill="white"/>
-            <circle cx="208" cy="186" r="1.5" fill="white"/>
-            <circle cx="216" cy="186" r="1.5" fill="white"/>
-            <circle cx="200" cy="190" r="1.5" fill="white"/>
-            <circle cx="208" cy="190" r="1.5" fill="white"/>
-            <circle cx="216" cy="190" r="1.5" fill="white"/>
-            <circle cx="200" cy="194" r="1.5" fill="white"/>
-            <circle cx="208" cy="194" r="1.5" fill="white"/>
-            <circle cx="216" cy="194" r="1.5" fill="white"/>
-            
-            <!-- Content blocks -->
-            <rect x="55" y="220" width="120" height="30" rx="6" fill="#e8e0f0" opacity="0.6"/>
-            <rect x="190" y="220" width="120" height="30" rx="6" fill="#e8e0f0" opacity="0.6"/>
+            <!-- Exclamation Mark - Clear Purple -->
+            <g fill="#a078c8" filter="url(#clearPurpleGlow)">
+              <!-- Exclamation line - thicker for clarity -->
+              <rect x="92" y="65" width="16" height="55" rx="8"/>
+              <!-- Exclamation dot - bigger for clarity -->
+              <circle cx="100" cy="135" r="8"/>
+            </g>
           </svg>
         </div>
       </div>
