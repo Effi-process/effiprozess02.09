@@ -42,10 +42,10 @@ function goToSlide(index) {
     el.style.filter = (i === currentSlide) ? 'blur(0px)' : 'blur(1px)';
   });
   
-  // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite, Probleme-Seite und Solutions-Seite
+  // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite, Probleme-Seite, Solutions-Seite und Calculator-Seite
   const canvas = document.getElementById('dotAnimation');
   if (canvas) {
-    canvas.style.display = (currentSlide === 2 || currentSlide === 3 || currentSlide === 4) ? 'none' : 'block';
+    canvas.style.display = (currentSlide === 2 || currentSlide === 3 || currentSlide === 4 || currentSlide === 5 || currentSlide === 6) ? 'none' : 'block';
   }
 
   // Header-Farbe anhand des Slide-Typs, nicht per Index
@@ -54,7 +54,7 @@ function goToSlide(index) {
   const dark = isDarkSlide(currentSlide);
 
   // Hide header on slide 5 (solutions page), show on all others  
-  if (currentSlide === 4) { // Slide 5 has index 4 (0-based)
+  if (currentSlide === 5) { // Slide 5 only
     header.style.display = 'none';
   } else {
     header.style.display = 'block';
@@ -487,3 +487,37 @@ document.addEventListener('DOMContentLoaded', () => {
 function goToHome() {
   goToSlide(0);
 }
+
+// Calculator function for time savings
+function calculateSavings() {
+  const tasksPerDay = parseInt(document.getElementById('tasksPerDay').value) || 0;
+  const minutesPerTask = parseInt(document.getElementById('minutesPerTask').value) || 0;
+  const workDays = parseInt(document.getElementById('workDays').value) || 5;
+  const automationPercent = parseInt(document.getElementById('automationPercent').value) || 0;
+  const employees = parseInt(document.getElementById('employees').value) || 1;
+  
+  // Calculate daily time savings per employee (in hours)
+  const dailyTimeSavingsPerEmployee = (tasksPerDay * minutesPerTask * automationPercent / 100) / 60;
+  
+  // Calculate annual hours saved (52 weeks per year)
+  const annualHoursSaved = dailyTimeSavingsPerEmployee * workDays * 52 * employees;
+  
+  // Calculate cost savings (75,000€ per year = ~36€ per hour for 2080 work hours)
+  const hourlyRate = 75000 / 2080; // ~36€ per hour
+  const annualCostSavings = annualHoursSaved * hourlyRate;
+  
+  // Update display
+  document.getElementById('hoursSaved').textContent = 
+    Math.round(annualHoursSaved).toLocaleString() + ' hours';
+  document.getElementById('costSaved').textContent = 
+    '€' + Math.round(annualCostSavings).toLocaleString();
+}
+
+// Calculate on page load with default values
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    if (document.getElementById('tasksPerDay')) {
+      calculateSavings();
+    }
+  }, 100);
+});
