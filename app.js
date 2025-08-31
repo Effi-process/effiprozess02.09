@@ -685,17 +685,32 @@ function goToHome() {
 
 // Calculator function for time savings
 function calculateSavings() {
-  const tasksPerDay = parseInt(document.getElementById('tasksPerDay').value) || 0;
-  const minutesPerTask = parseInt(document.getElementById('minutesPerTask').value) || 0;
-  const workDays = parseInt(document.getElementById('workDays').value) || 5;
-  const automationPercent = parseInt(document.getElementById('automationPercent').value) || 0;
-  const employees = parseInt(document.getElementById('employees').value) || 1;
+  const tasksPerDay = document.getElementById('tasksPerDay').value;
+  const minutesPerTask = document.getElementById('minutesPerTask').value;
+  const workDays = document.getElementById('workDays').value;
+  const automationPercent = document.getElementById('automationPercent').value;
+  const employees = document.getElementById('employees').value;
+  
+  // Check if all fields are selected
+  if (!tasksPerDay || !minutesPerTask || !workDays || !automationPercent || !employees) {
+    // Hide results if any field is not selected
+    document.getElementById('hoursSaved').textContent = '--';
+    document.getElementById('costSaved').textContent = '--';
+    return;
+  }
+  
+  // Convert to numbers
+  const tasks = parseInt(tasksPerDay);
+  const minutes = parseInt(minutesPerTask);
+  const days = parseInt(workDays);
+  const automation = parseInt(automationPercent);
+  const teamSize = parseInt(employees);
   
   // Calculate daily time savings per employee (in hours)
-  const dailyTimeSavingsPerEmployee = (tasksPerDay * minutesPerTask * automationPercent / 100) / 60;
+  const dailyTimeSavingsPerEmployee = (tasks * minutes * automation / 100) / 60;
   
   // Calculate annual hours saved (52 weeks per year)
-  const annualHoursSaved = dailyTimeSavingsPerEmployee * workDays * 52 * employees;
+  const annualHoursSaved = dailyTimeSavingsPerEmployee * days * 52 * teamSize;
   
   // Calculate cost savings (75,000€ per year = ~36€ per hour for 2080 work hours)
   const hourlyRate = 75000 / 2080; // ~36€ per hour
@@ -708,11 +723,13 @@ function calculateSavings() {
     '€' + Math.round(annualCostSavings).toLocaleString();
 }
 
-// Calculate on page load with default values
+// Initialize calculator with empty state
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     if (document.getElementById('tasksPerDay')) {
-      calculateSavings();
+      // Set initial state to show placeholders
+      document.getElementById('hoursSaved').textContent = '--';
+      document.getElementById('costSaved').textContent = '--';
     }
   }, 100);
 });
