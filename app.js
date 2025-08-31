@@ -24,33 +24,54 @@ function isDarkSlide(i) {
   return el.classList.contains('problems') || el.dataset.theme === 'dark';
 }
 
-function goToSlide(index) {
-  if (!slides.length) refreshSlides();
-  
-  // Prevent navigation beyond last slide
-  if (index >= slides.length) {
-    return;
-  }
-  
-  currentSlide = clamp(index, 0, slides.length - 1);
+let transitioning = false;
 
+function goToSlide(nextIndex) {
+  if (!slides.length) refreshSlides();
+  if (transitioning) return;
+  
+  const next = clamp(nextIndex, 0, slides.length - 1);
+  if (next === currentSlide) return;
+
+  const prevEl = slides[currentSlide];
+  const nextEl = slides[next];
+
+  // Richtung festlegen: runter = +1, hoch = -1
+  const dir = next > currentSlide ? 1 : -1;
+  document.documentElement.style.setProperty('--dir', String(dir));
+
+  transitioning = true;
+
+  // Enter/Leave-Klassen setzen
+  nextEl.classList.add('is-entering');       // Startposition vorbereiten
+  // Force reflow, damit der Enter-Start gültig ist bevor wir aktiv schalten
+  // (so greifen die Transitions sauber)
+  void nextEl.offsetWidth;
+
+  prevEl.classList.add('is-leaving');
+  prevEl.classList.remove('is-active');
+
+  nextEl.classList.add('is-active');
+  nextEl.classList.remove('is-entering');
+
+  // Header-Theme via Body-Klasse (assuming slide 4 is dark)
+  document.body.classList.toggle('is-dark', next === 4);
+
+  // ARIA for screen readers
   slides.forEach((el, i) => {
-    const isActive = (i === currentSlide);
-    
-    // Always display flex for smooth transitions
-    el.style.display = 'flex';
-    
-    // Use CSS classes instead of inline styles for transitions
-    if (isActive) {
-      el.classList.add('active');
-      el.style.zIndex = '100';
-      el.style.visibility = 'visible';
-    } else {
-      el.classList.remove('active');
-      el.style.zIndex = '1';  
-      el.style.visibility = 'hidden';
-    }
+    el.setAttribute('aria-hidden', i === next ? 'false' : 'true');
   });
+
+  // Nach Ende der Transition aufräumen
+  const onDone = (e) => {
+    if (e.target !== prevEl) return;
+    prevEl.removeEventListener('transitionend', onDone);
+    prevEl.classList.remove('is-leaving');
+    transitioning = false;
+  };
+  prevEl.addEventListener('transitionend', onDone, { once: true });
+
+  currentSlide = next;
   
   // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite, Probleme-Seite, Solutions-Seite und Calculator-Seite
   const canvas = document.getElementById('dotAnimation');
@@ -58,19 +79,12 @@ function goToSlide(index) {
     canvas.style.display = (currentSlide === 2 || currentSlide === 3 || currentSlide === 4 || currentSlide === 5 || currentSlide === 6) ? 'none' : 'block';
   }
 
-  // Header-Farbe anhand des Slide-Typs, nicht per Index
-  const header = document.querySelector('.header');
-  const logo = document.querySelector('.header-logo');
-  const dark = isDarkSlide(currentSlide);
-
   // Hide header on slide 5 (solutions page), show on all others  
+  const header = document.querySelector('.header');
   if (currentSlide === 5) { // Slide 5 only
     header.style.display = 'none';
   } else {
     header.style.display = 'block';
-    header.style.backgroundColor = dark ? '#000000' : '#ffffff';
-    header.style.borderBottomColor = dark ? '#333' : '#cccccc';
-    if (logo) logo.style.color = dark ? '#ffffff' : '#808080';
   }
 
   // Hide all select dropdowns when changing slides
@@ -618,24 +632,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   refreshSlides();
 
-  // Anfangszustand für alle Slides - use CSS classes for consistent transitions
-  slides.forEach((el,i) => {
-    const isFirst = i === 0;
+  // Startzustand: nur Slide 0 aktiv, keine Inline-Styles nötig
+  slides.forEach((el, i) => {
+    // Clean slate - remove old classes and inline styles
+    el.classList.remove('is-entering', 'is-leaving', 'is-active', 'active');
+    el.style.display = '';
+    el.style.visibility = '';
+    el.style.opacity = '';
+    el.style.transform = '';
+    el.style.filter = '';
+    el.style.pointerEvents = '';
+    el.style.transition = '';
+    el.style.zIndex = '';
     
-    // Always display flex for smooth transitions
-    el.style.display = 'flex';
-    
-    // Use CSS classes for transitions (defined in styles.css)
-    if (isFirst) {
-      el.classList.add('active');
-      el.style.zIndex = '100';
-      el.style.visibility = 'visible';
-    } else {
-      el.classList.remove('active');
-      el.style.zIndex = '1';
-      el.style.visibility = 'hidden';
+    // Set initial state
+    if (i === 0) {
+      el.classList.add('is-active');
     }
+    
+    // ARIA setup
+    el.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
   });
+
+  // Header-Theme für Start
+  document.body.classList.toggle('is-dark', currentSlide === 4);
 
   // Carousel DOM holen (falls es existiert)
   track = document.getElementById('servicesTrack');
