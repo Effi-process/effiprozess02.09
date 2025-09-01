@@ -87,12 +87,12 @@ function goToSlide(nextIndex) {
 
   currentSlide = next;
   
-  // Canvas nur auf Hero-Seite (Slide 0) anzeigen
+  // Canvas ALWAYS VISIBLE - NEVER HIDE IT
   const canvas = document.getElementById('dotAnimation');
   if (canvas) {
-    const shouldShow = (currentSlide === 0); // Nur auf Hero-Slide
-    canvas.style.display = shouldShow ? 'block' : 'none';
-    console.log(`Canvas display: ${shouldShow ? 'block' : 'none'} (slide: ${currentSlide})`);
+    canvas.style.display = 'block';
+    canvas.style.visibility = 'visible';
+    canvas.style.opacity = '1';
   }
 
   // Header ist mit CSS immer sichtbar - keine JavaScript-Manipulation nötig
@@ -151,30 +151,58 @@ function bindVerticalArrows(){
     }
   });
 
-  // Strict scroll-to-slide navigation - EXACTLY ONE slide per scroll gesture
+  // Robust scroll-to-slide navigation with safeguards
   let isScrolling = false;
   let scrollTimeout = null;
-  const SCROLL_COOLDOWN = 1200; // 1.2 Sekunden Wartezeit zwischen Scroll-Aktionen
+  let navigationReady = false;
+  const SCROLL_COOLDOWN = 800;
+  const DELTA_THRESHOLD = 80; // Minimum scroll distance to trigger navigation
+  const STARTUP_DELAY = 1500; // Delay before navigation becomes active
+  
+  // Enable navigation after startup delay
+  setTimeout(() => {
+    navigationReady = true;
+    console.log('Navigation enabled after startup delay');
+  }, STARTUP_DELAY);
+  
+  const toPixels = (e) => {
+    return e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
+  };
+  
+  const isInsideScrollable = (target) => {
+    const el = target;
+    const scrollable = el?.closest?.('[data-scrollable="true"], .portfolio-gallery, select') || null;
+    if (!scrollable) return false;
+    return scrollable.scrollHeight > scrollable.clientHeight;
+  };
   
   window.addEventListener('wheel', (e) => {
     e.preventDefault();
     
-    // Komplett blockieren während Cooldown
-    if (isScrolling) return;
+    // Block if not ready, transitioning, or already scrolling
+    if (!navigationReady || isScrolling || transitioning) return;
     
-    // Sofort blockieren für weitere Scroll-Events
+    // Block if inside scrollable content
+    if (isInsideScrollable(e.target)) return;
+    
+    // Calculate scroll distance
+    const dy = Math.sign(e.deltaY) * Math.abs(toPixels(e));
+    if (Math.abs(dy) < DELTA_THRESHOLD) return; // Ignore micro-scrolls
+    
+    // SPECIAL: Protect Hero slide from accidental navigation
+    if (currentSlide === 0 && Math.abs(dy) < 120) {
+      console.log('Hero slide protected from small scroll');
+      return;
+    }
+    
     isScrolling = true;
     
-    // Bestimme Richtung und navigiere nur EINEN Slide
-    if (e.deltaY > 0 && currentSlide < slides.length - 1) {
-      // Runter scrollen - nächste Seite
+    if (dy > 0 && currentSlide < slides.length - 1) {
       goToSlide(currentSlide + 1);
-    } else if (e.deltaY < 0 && currentSlide > 0) {
-      // Hoch scrollen - vorherige Seite
+    } else if (dy < 0 && currentSlide > 0) {
       goToSlide(currentSlide - 1);
     }
     
-    // Reset nach längerer Wartezeit
     if (scrollTimeout) clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
       isScrolling = false;
@@ -278,6 +306,145 @@ function bindCarouselControls() {
   }
 }
 
+/* ===== PORTFOLIO GALLERY ===== */
+let portfolioIndex = 0;
+let portfolioTrack;
+
+function updatePortfolioGallery() {
+  if (!portfolioTrack) return;
+  const w = portfolioTrack.parentElement.getBoundingClientRect().width;
+  portfolioTrack.style.transform = `translateX(${-portfolioIndex * 20}%)`;
+  updatePortfolioArrows();
+}
+
+function updatePortfolioArrows() {
+  const leftBtn = document.getElementById('portfolioPrev');
+  const rightBtn = document.getElementById('portfolioNext');
+  if (!leftBtn || !rightBtn) return;
+
+  leftBtn.style.display = portfolioIndex === 0 ? 'none' : 'block';
+  rightBtn.style.display = portfolioIndex === 4 ? 'none' : 'block';
+  
+  // Update dots
+  const dots = document.querySelectorAll('.portfolio-dot');
+  dots.forEach((dot, i) => {
+    if (i === portfolioIndex) {
+      dot.style.background = '#a078c8';
+      dot.classList.add('active');
+    } else {
+      dot.style.background = '#ddd';
+      dot.classList.remove('active');
+    }
+  });
+}
+
+function bindPortfolioControls() {
+  portfolioTrack = document.getElementById('portfolioTrack');
+  if (!portfolioTrack) return;
+  
+  const leftBtn = document.getElementById('portfolioPrev');
+  const rightBtn = document.getElementById('portfolioNext');
+  if (!leftBtn || !rightBtn) return;
+
+  leftBtn.addEventListener('click', () => {
+    portfolioIndex = Math.max(0, portfolioIndex - 1);
+    updatePortfolioGallery();
+  });
+  
+  rightBtn.addEventListener('click', () => {
+    portfolioIndex = Math.min(4, portfolioIndex + 1);
+    updatePortfolioGallery();
+  });
+  
+  // Dot navigation
+  const dots = document.querySelectorAll('.portfolio-dot');
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      portfolioIndex = i;
+      updatePortfolioGallery();
+    });
+  });
+  
+  // Keyboard support when on services slide
+  window.addEventListener('keydown', (e) => {
+    if (currentSlide !== 1) return; // Only on services slide
+    if (e.repeat) return;
+    if (e.key === 'ArrowLeft') leftBtn.click();
+    if (e.key === 'ArrowRight') rightBtn.click();
+  });
+
+  updatePortfolioGallery();
+}
+
+/* ===== INTERFACE GALLERY ===== */
+let interfaceIndex = 0;
+let interfaceTrack;
+
+function updateInterfaceGallery() {
+  if (!interfaceTrack) return;
+  interfaceTrack.style.transform = `translateX(${-interfaceIndex * 25}%)`;
+  updateInterfaceArrows();
+}
+
+function updateInterfaceArrows() {
+  const leftBtn = document.getElementById('interfacePrev');
+  const rightBtn = document.getElementById('interfaceNext');
+  if (!leftBtn || !rightBtn) return;
+
+  leftBtn.style.display = interfaceIndex === 0 ? 'none' : 'block';
+  rightBtn.style.display = interfaceIndex === 3 ? 'none' : 'block';
+  
+  // Update dots
+  const dots = document.querySelectorAll('.interface-dot');
+  dots.forEach((dot, i) => {
+    if (i === interfaceIndex) {
+      dot.style.background = '#a078c8';
+      dot.classList.add('active');
+    } else {
+      dot.style.background = '#ddd';
+      dot.classList.remove('active');
+    }
+  });
+}
+
+function bindInterfaceControls() {
+  interfaceTrack = document.getElementById('interfaceTrack');
+  if (!interfaceTrack) return;
+  
+  const leftBtn = document.getElementById('interfacePrev');
+  const rightBtn = document.getElementById('interfaceNext');
+  if (!leftBtn || !rightBtn) return;
+
+  leftBtn.addEventListener('click', () => {
+    interfaceIndex = Math.max(0, interfaceIndex - 1);
+    updateInterfaceGallery();
+  });
+  
+  rightBtn.addEventListener('click', () => {
+    interfaceIndex = Math.min(3, interfaceIndex + 1);
+    updateInterfaceGallery();
+  });
+  
+  // Dot navigation
+  const dots = document.querySelectorAll('.interface-dot');
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      interfaceIndex = i;
+      updateInterfaceGallery();
+    });
+  });
+  
+  // Keyboard support when on interface slide
+  window.addEventListener('keydown', (e) => {
+    if (currentSlide !== 2) return; // Only on interface slide
+    if (e.repeat) return;
+    if (e.key === 'ArrowLeft') leftBtn.click();
+    if (e.key === 'ArrowRight') rightBtn.click();
+  });
+
+  updateInterfaceGallery();
+}
+
 /* ===== PROBLEMS CAROUSEL ===== */
 function updateProblemsCarousel() {
   if (!problemsTrack) return;
@@ -330,32 +497,41 @@ function bindProblemsControls() {
 /* ===== BUBBLE ANIMATION ===== */
 class OrganicBubbleAnimation {
   constructor() {
+    console.log('OrganicBubbleAnimation constructor called');
+    
     this.canvas = document.getElementById('dotAnimation');
     if (!this.canvas) {
-      console.warn('Canvas element not found');
+      console.error('Canvas element "dotAnimation" not found in DOM!');
+      console.log('Available elements with IDs:', Array.from(document.querySelectorAll('[id]')).map(el => el.id));
       return;
     }
+    
+    console.log('Canvas found:', this.canvas);
 
     this.ctx = this.canvas.getContext('2d');
     if (!this.ctx) {
-      console.warn('Canvas context not available');
+      console.error('Canvas 2D context not available');
       return;
     }
+    
+    console.log('Canvas context obtained');
 
     this.dots = [];
     this.time = 0;
     this.COLOR = { r: 160, g: 120, b: 200 };
 
     this.setupCanvas();
-    this.createOrganicBubble();
-    this.bindEvents();
+    console.log('Canvas setup complete');
     
-    // Start animation with a small delay to ensure everything is ready
-    setTimeout(() => {
-      if (this.canvas && this.ctx) {
-        this.animate();
-      }
-    }, 100);
+    this.createOrganicBubble();
+    console.log('Organic bubble created with', this.dots.length, 'dots');
+    
+    this.bindEvents();
+    console.log('Events bound');
+    
+    // Start animation immediately - no delay needed
+    this.animate();
+    console.log('Animation started');
   }
 
   setupCanvas() {
@@ -498,7 +674,7 @@ class OrganicBubbleAnimation {
   }
 
   updateBubbleBreathing() {
-    if (currentSlide !== 0) return; // Direkt Slide 0 prüfen statt idx.hero
+    // ALWAYS RUN - no slide dependency
 
     const t = this.time * 0.0002;
     const centerX = this.canvas.width / 2;
@@ -518,26 +694,32 @@ class OrganicBubbleAnimation {
       dot.targetX = centerX + radius * Math.sin(dot.phi) * Math.cos(dot.theta);
       dot.targetY = centerY + radius * Math.sin(dot.phi) * Math.sin(dot.theta);
 
-      const heroContainer = document.querySelector('.hero-text-container');
-      if (heroContainer) {
-        const rect = heroContainer.getBoundingClientRect();
-        const hx = rect.left + rect.width / 2;
-        const hy = rect.top + rect.height / 2;
-        const hrx = Math.max(150, rect.width * 0.60);
-        const hry = Math.max(100, rect.height * 0.60);
+      // Only apply hero text cutout on the hero slide (slide 0)
+      if (currentSlide === 0) {
+        const heroContainer = document.querySelector('.hero-text-container');
+        if (heroContainer) {
+          const rect = heroContainer.getBoundingClientRect();
+          const hx = rect.left + rect.width / 2;
+          const hy = rect.top + rect.height / 2;
+          const hrx = Math.max(150, rect.width * 0.60);
+          const hry = Math.max(100, rect.height * 0.60);
 
-        const dx = dot.targetX - hx;
-        const dy = dot.targetY - hy;
-        const d  = Math.sqrt((dx*dx)/(hrx*hrx) + (dy*dy)/(hry*hry));
+          const dx = dot.targetX - hx;
+          const dy = dot.targetY - hy;
+          const d  = Math.sqrt((dx*dx)/(hrx*hrx) + (dy*dy)/(hry*hry));
 
-        if (d < 0.85) {
-          dot.targetOpacity = 0;
-        } else if (d < 1.10) {
-          const p = (d-0.85)/(1.10-0.85);
-          dot.targetOpacity = dot.opacity * 0.6 * Math.sin(p*Math.PI*0.5);
-        } else {
-          dot.targetOpacity = dot.opacity;
+          if (d < 0.85) {
+            dot.targetOpacity = 0;
+          } else if (d < 1.10) {
+            const p = (d-0.85)/(1.10-0.85);
+            dot.targetOpacity = dot.opacity * 0.6 * Math.sin(p*Math.PI*0.5);
+          } else {
+            dot.targetOpacity = dot.opacity;
+          }
         }
+      } else {
+        // On all other slides, keep full opacity
+        dot.targetOpacity = dot.opacity;
       }
     }
   }
@@ -547,33 +729,26 @@ class OrganicBubbleAnimation {
     try {
       this.time += 16;
 
-      if (currentSlide === 0) { // Direkt Slide 0 prüfen
-        this.updateBubbleBreathing();
-      } else {
-        // Alle anderen Seiten: Animation komplett ausblenden
-        for (const dot of this.dots) {
-          dot.targetOpacity = 0;
-        }
-      }
+      // ALWAYS run animation - no slide dependency
+      this.updateBubbleBreathing();
 
       // Always clear the canvas
       if (this.ctx) {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       }
 
-      // Nur animieren und zeichnen wenn auf Hero Seite (Slide 0)
-      if (currentSlide === 0) {
+      // ALWAYS draw animation on all slides
+      if (true) {
         for (const dot of this.dots) {
           dot.x += (dot.targetX - dot.x) * 0.08;
           dot.y += (dot.targetY - dot.y) * 0.08;
           dot.size += (dot.targetSize - dot.size) * 0.12;
           dot.opacity += (dot.targetOpacity - dot.opacity) * 0.06;
 
-          if (currentSlide === 0) { // Direkt Slide 0 prüfen
-            const jitter = 0.15;
-            dot.x += (Math.random() - 0.5) * jitter;
-            dot.y += (Math.random() - 0.5) * jitter;
-          }
+          // Always add subtle jitter for organic movement
+          const jitter = 0.15;
+          dot.x += (Math.random() - 0.5) * jitter;
+          dot.y += (Math.random() - 0.5) * jitter;
 
           if (dot.opacity > 0.01 && this.ctx) {
             // Verwende die spezifische Farbe des Punktes oder fallback zur Standard-Farbe
@@ -600,28 +775,33 @@ let bubbleAnimation;
 function startLoadingAnimation() {
   const progressNumber = document.getElementById('progressNumber');
   const progressFill = document.getElementById('progressFill');
+  const loadingScreen = document.getElementById('loadingScreen');
   
-  if (!progressNumber || !progressFill) {
+  if (!progressNumber || !progressFill || !loadingScreen) {
     console.error('Loading elements not found');
-    completeLoading(); // Skip loading if elements missing
     return;
   }
   
+  // Ensure loading screen is visible
+  loadingScreen.style.display = 'flex';
+  loadingScreen.style.opacity = '1';
+  loadingScreen.classList.remove('fade-out');
+  
   let progress = 0;
   const interval = setInterval(() => {
-    progress += Math.random() * 8 + 3;
+    progress += Math.random() * 4 + 2; // Slower, more realistic progress
     if (progress >= 100) {
       progress = 100;
       clearInterval(interval);
       // Auto-complete loading after reaching 100%
       setTimeout(() => {
         completeLoading();
-      }, 500);
+      }, 800); // Longer delay to see the 100%
     }
     
     progressNumber.textContent = Math.floor(progress);
     progressFill.style.width = progress + '%';
-  }, 60); // Faster loading
+  }, 80); // Slower animation for better visibility
 }
 
 function completeLoading() {
@@ -632,6 +812,8 @@ function completeLoading() {
     loadingScreen.classList.add('fade-out');
     setTimeout(() => {
       loadingScreen.style.display = 'none';
+      loadingScreen.style.visibility = 'hidden';
+      loadingScreen.style.opacity = '0';
     }, 800);
   }
   
@@ -704,10 +886,39 @@ async function loadAIIcon() {
   }
 }
 
-/* ===== LOAD RELOCATO LOGO (DISABLED) ===== */
+/* ===== LOAD RELOCATO LOGO ===== */
 async function loadRelocatoLogo() {
-  // Disabled - use standard "R" avatar instead
-  console.log('Relocato logo loading disabled - using standard avatar');
+  try {
+    // Find the Relocato testimonial container
+    const relocatoContainer = document.querySelector('.slide[data-slide="6"]');
+    if (relocatoContainer) {
+      // Find the testimonial with Relocato text
+      const testimonials = relocatoContainer.querySelectorAll('[style*="background: white"]');
+      for (const testimonial of testimonials) {
+        if (testimonial.textContent.includes('Relocato')) {
+          // Find the avatar circle with "R"
+          const avatarCircle = testimonial.querySelector('[style*="background: linear-gradient(135deg, #bdc887, #d4e195)"]');
+          if (avatarCircle) {
+            // Replace the "R" with the actual logo
+            avatarCircle.innerHTML = '';
+            const logoImg = document.createElement('img');
+            logoImg.src = './Bildschirmfoto 2025-09-02 um 00.17.11.png';
+            logoImg.alt = 'Relocato Logo';
+            logoImg.style.cssText = `
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              border-radius: 16px;
+            `;
+            avatarCircle.appendChild(logoImg);
+          }
+          break;
+        }
+      }
+    }
+  } catch (error) {
+    console.log('Relocato logo could not be loaded:', error);
+  }
 }
 
 /* ===== INITIALIZATION ===== */
@@ -722,14 +933,14 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshSlides();
     console.log('Found', slides.length, 'slides');
     
-    // Fallback: Complete loading after 4 seconds if not auto-completed
+    // Fallback: Complete loading after 6 seconds if not auto-completed
     setTimeout(() => {
       const loadingScreen = document.getElementById('loadingScreen');
       if (loadingScreen && loadingScreen.style.display !== 'none') {
         console.log('Loading timeout - forcing completion');
         completeLoading();
       }
-    }, 4000);
+    }, 6000);
   } catch (error) {
     console.error('Initialization error:', error);
     completeLoading(); // Force complete on any error
@@ -777,24 +988,43 @@ document.addEventListener('DOMContentLoaded', () => {
   bindVerticalArrows();
   if (track)          bindCarouselControls();
   if (problemsTrack)  bindProblemsControls();
+  bindPortfolioControls();
+  bindInterfaceControls();
+  bindLightboxControls();
 
-  goToSlide(0);
-  updateCarouselArrows();
-  updateProblemsArrows();
-  
-  // Ensure canvas is visible on start
+  // FORCE initial state for animation
+  currentSlide = 0;
   const canvas = document.getElementById('dotAnimation');
   if (canvas) {
     canvas.style.display = 'block';
+    canvas.style.visibility = 'visible';
+    canvas.style.opacity = '1';
     console.log('Canvas forced visible on initialization');
   }
+  
+  // Initialize first slide without calling goToSlide to avoid canvas hiding
+  if (slides.length > 0) {
+    slides[0].classList.add('is-active');
+    slides[0].setAttribute('aria-hidden', 'false');
+  }
+  
+  updateCarouselArrows();
+  updateProblemsArrows();
 
-  // Initialize bubble animation with error handling
+  // Initialize bubble animation with error handling and debugging
   try {
-    bubbleAnimation = new OrganicBubbleAnimation();
-    console.log('Bubble animation initialized');
+    console.log('Attempting to initialize bubble animation...');
+    const canvas = document.getElementById('dotAnimation');
+    console.log('Canvas element:', canvas);
+    
+    if (canvas) {
+      bubbleAnimation = new OrganicBubbleAnimation();
+      console.log('Bubble animation initialized successfully');
+    } else {
+      console.error('Canvas element "dotAnimation" not found!');
+    }
   } catch (error) {
-    console.warn('Bubble animation failed to initialize:', error);
+    console.error('Bubble animation failed to initialize:', error);
   }
   
   // Load the header logo
@@ -816,6 +1046,13 @@ document.addEventListener('DOMContentLoaded', () => {
     loadRelocatoLogo();
   } catch (error) {
     console.warn('Relocato logo loading failed:', error);
+  }
+  
+  // Initialize EmailJS
+  try {
+    initializeEmailJS();
+  } catch (error) {
+    console.warn('EmailJS initialization failed:', error);
   }
   
   // Initialize navigation menu
@@ -893,7 +1130,216 @@ function toggleServicesGroup() {
 // Make sure the function is globally available
 window.toggleServicesGroup = toggleServicesGroup;
 
+/* ===== LIGHTBOX FUNCTIONALITY ===== */
+let lightboxImages = {
+  portfolio: [
+    '6BD78E87-B154-478F-843B-7B0B787D22B3.png',
+    '3FD85107-B447-46C8-88DA-AFBFE99B888C.png',
+    '24D3B85F-56EA-4184-A59F-1F8E6386345E.png',
+    'D5E73CA4-6AA4-4F12-BEB8-003CD75B9E44.png',
+    '86F92B05-4980-42E2-B975-754811423184.png'
+  ],
+  interface: [
+    'BDDCD0F8-6A26-41B0-9727-3E17D10B246F.jpeg',
+    'C6744890-160C-4CA0-9B4F-96EB18E848AE.jpeg',
+    'CBACF8D8-F199-4091-8B6C-D0592AEB8EC2.jpeg',
+    'EC4885F5-358A-4B44-8843-E4DBFACAA367.jpeg'
+  ]
+};
+
+let currentLightboxIndex = 0;
+let currentGalleryType = 'portfolio';
+
+function openLightbox(index, galleryType) {
+  currentLightboxIndex = index;
+  currentGalleryType = galleryType;
+  
+  const modal = document.getElementById('lightboxModal');
+  const image = document.getElementById('lightboxImage');
+  const counter = document.getElementById('lightboxCounter');
+  
+  const images = lightboxImages[galleryType];
+  
+  if (modal && image && counter) {
+    image.src = images[index];
+    counter.textContent = `${index + 1} / ${images.length}`;
+    modal.classList.add('active');
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeLightbox() {
+  const modal = document.getElementById('lightboxModal');
+  if (modal) {
+    modal.classList.remove('active');
+    // Restore body scroll
+    document.body.style.overflow = 'hidden'; // Keep hidden since we're in slide mode
+  }
+}
+
+function lightboxPrev() {
+  const images = lightboxImages[currentGalleryType];
+  currentLightboxIndex = currentLightboxIndex > 0 ? currentLightboxIndex - 1 : images.length - 1;
+  updateLightbox();
+}
+
+function lightboxNext() {
+  const images = lightboxImages[currentGalleryType];
+  currentLightboxIndex = currentLightboxIndex < images.length - 1 ? currentLightboxIndex + 1 : 0;
+  updateLightbox();
+}
+
+function updateLightbox() {
+  const image = document.getElementById('lightboxImage');
+  const counter = document.getElementById('lightboxCounter');
+  const images = lightboxImages[currentGalleryType];
+  
+  if (image && counter) {
+    image.src = images[currentLightboxIndex];
+    counter.textContent = `${currentLightboxIndex + 1} / ${images.length}`;
+  }
+}
+
+function bindLightboxControls() {
+  const modal = document.getElementById('lightboxModal');
+  const closeBtn = document.getElementById('lightboxClose');
+  const prevBtn = document.getElementById('lightboxPrev');
+  const nextBtn = document.getElementById('lightboxNext');
+  
+  if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+  if (prevBtn) prevBtn.addEventListener('click', lightboxPrev);
+  if (nextBtn) nextBtn.addEventListener('click', lightboxNext);
+  
+  // Close on click outside image
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeLightbox();
+    });
+  }
+  
+  // Keyboard controls
+  document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('lightboxModal');
+    if (modal && modal.classList.contains('active')) {
+      switch(e.key) {
+        case 'Escape':
+          closeLightbox();
+          break;
+        case 'ArrowLeft':
+          lightboxPrev();
+          break;
+        case 'ArrowRight':
+          lightboxNext();
+          break;
+      }
+    }
+  });
+}
+
+// Make lightbox functions globally available
+window.openLightbox = openLightbox;
+window.closeLightbox = closeLightbox;
+
 /* ===== LANGUAGE SWITCHER ===== */
+const translations = {
+  de: {
+    // Navigation
+    navStart: 'Start',
+    navWebsites: 'Moderne Websites',
+    navInterfaces: 'Benutzeroberflächen', 
+    navAI: 'KI-Automatisierung',
+    navProblems: 'Probleme & Lösungen',
+    navWorkflow: 'Workflow Integration',
+    navCalculator: 'Rechner',
+    navContact: 'Kontakt',
+    
+    // Hero
+    heroWebsites: 'Moderne Websites',
+    heroInterfaces: 'Benutzeroberflächen',
+    heroAI: 'künstliche Intelligenz',
+    heroFor: 'für Ihre',
+    heroProcesses: 'effizienten Prozesse',
+    
+    // Services
+    servicesCategory: 'WEBSITE SOLUTIONS',
+    servicesTitle: 'Moderne Websites, die Ihr<br/>Unternehmen voranbringen.',
+    servicesDescription: 'Wir erstellen responsive, hochperformante Websites mit modernsten Technologien. Von der Konzeption bis zur Bereitstellung sorgen wir dafür, dass Ihre digitale Präsenz mit nahtlosen Benutzererfahrungen und leistungsstarken Backend-Lösungen hervorsticht.',
+    servicesTech: 'Verwendete Technologien:',
+    
+    // Interface
+    interfaceCategory: 'ANGEPASSTE INTERFACES',
+    interfaceTitle: 'Maßgeschneiderte<br/>Benutzeroberflächen für<br/>Ihre spezifischen Anforderungen.',
+    interfaceDescription: 'Wir entwickeln Interfaces, die präzise auf Ihre Geschäftsprozesse und Nutzeranforderungen zugeschnitten sind. Durch intensive Analyse Ihrer Workflows schaffen wir intuitive Lösungen, die komplexe Aufgaben vereinfachen und die Produktivität Ihrer Teams maximieren.',
+    
+    // AI
+    aiCategory: 'KI-AGENTEN SYSTEME',
+    aiTitle: 'Intelligente Automatisierung,<br/>die komplexe Aufgaben übernimmt.',
+    aiDescription1: 'Unsere AI-Agenten übernehmen komplexe Aufgaben teilweise bis vollständig. Sie verstehen Kontext, treffen Entscheidungen und passen sich an Ihre Geschäftsprozesse an.',
+    aiDescription2: 'Durch intelligente Integration können wir in verschiedene Programme eintauchen und dort direkt mit AI arbeiten – von Kundenservice über Datenanalyse bis hin zu automatisierten Workflows, die rund um die Uhr für Sie arbeiten.',
+    aiCapabilities: 'Kernfähigkeiten',
+    
+    // Contact
+    contactCategory: 'Kontakt',
+    contactTitle: 'Bereit, Ihr Unternehmen<br/>zu transformieren?',
+    contactDescription1: 'Kontaktieren Sie unser Team, um zu erfahren, wie wir Ihre Prozesse optimieren können.',
+    contactDescription2: 'Senden Sie uns eine Nachricht und wir melden uns innerhalb von 24 Stunden zurück.',
+    contactButton: 'Kontakt',
+    
+    // Buttons
+    sendMessage: 'Nachricht senden'
+  },
+  en: {
+    // Navigation
+    navStart: 'Start',
+    navWebsites: 'Modern Websites',
+    navInterfaces: 'User Interfaces',
+    navAI: 'AI Automation', 
+    navProblems: 'Problems & Solutions',
+    navWorkflow: 'Workflow Integration',
+    navCalculator: 'Calculator',
+    navContact: 'Contact',
+    
+    // Hero
+    heroWebsites: 'Modern websites',
+    heroInterfaces: 'interfaces',
+    heroAI: 'artificial intelligence',
+    heroFor: 'for your',
+    heroProcesses: 'efficient processes',
+    
+    // Services
+    servicesCategory: 'WEBSITE SOLUTIONS',
+    servicesTitle: 'Modern websites that drive<br/>your business forward.',
+    servicesDescription: 'We create responsive, high-performance websites with cutting-edge technologies. From concept to deployment, we ensure your digital presence stands out with seamless user experiences and powerful backend solutions.',
+    servicesTech: 'Technologies we use:',
+    
+    // Interface
+    interfaceCategory: 'CUSTOM INTERFACES',
+    interfaceTitle: 'Tailored<br/>user interfaces for<br/>your specific requirements.',
+    interfaceDescription: 'We develop interfaces that are precisely tailored to your business processes and user requirements. Through intensive analysis of your workflows, we create intuitive solutions that simplify complex tasks and maximize your team productivity.',
+    
+    // AI
+    aiCategory: 'AI AGENT SYSTEMS',
+    aiTitle: 'Intelligent automation<br/>that takes over complex tasks.',
+    aiDescription1: 'Our AI agents take over complex tasks partially to completely. They understand context, make decisions, and adapt to your business processes.',
+    aiDescription2: 'Through intelligent integration, we can dive into various programs and work directly with AI there – from customer service via data analysis to automated workflows that work around the clock for you.',
+    aiCapabilities: 'Key Capabilities',
+    
+    // Contact
+    contactCategory: 'Contact',
+    contactTitle: 'Ready to transform<br/>your business?',
+    contactDescription1: 'Contact our team to discover how we can optimize your processes.',
+    contactDescription2: 'Send us a message and we will get back to you within 24 hours.',
+    contactButton: 'Contact',
+    
+    // Buttons
+    sendMessage: 'Send Message'
+  }
+};
+
+let currentLanguage = 'de'; // Default language
+
 function switchLanguage(lang) {
   // Update button states
   const enBtn = document.getElementById('langEN');
@@ -917,8 +1363,94 @@ function switchLanguage(lang) {
     deBtn.style.borderColor = '#e0e0e0';
   }
   
+  currentLanguage = lang;
+  updatePageContent(lang);
   console.log('Language switched to:', lang);
-  // Here you can add actual language switching logic later
+}
+
+function updatePageContent(lang) {
+  const t = translations[lang];
+  
+  // Navigation menu
+  document.querySelectorAll('.nav-item-title').forEach((el, i) => {
+    const keys = ['navStart', 'navWebsites', 'navInterfaces', 'navAI', 'navProblems', 'navWorkflow', 'navCalculator', 'navContact'];
+    if (keys[i] && t[keys[i]]) {
+      el.textContent = t[keys[i]];
+    }
+  });
+  
+  // Hero slide
+  const heroElements = document.querySelectorAll('.hero-main-text span');
+  if (heroElements.length >= 5) {
+    heroElements[0].textContent = t.heroWebsites;
+    heroElements[1].textContent = t.heroInterfaces;
+    heroElements[2].textContent = t.heroAI;
+    heroElements[3].textContent = t.heroFor;
+    heroElements[4].textContent = t.heroProcesses;
+  }
+  
+  // Services slide
+  const servicesCategory = document.querySelector('[data-slide="1"] .services-category');
+  if (servicesCategory) servicesCategory.textContent = t.servicesCategory;
+  
+  const servicesTitle = document.querySelector('[data-slide="1"] h2');
+  if (servicesTitle) servicesTitle.innerHTML = t.servicesTitle;
+  
+  const servicesDesc = document.querySelector('[data-slide="1"] p');
+  if (servicesDesc) servicesDesc.textContent = t.servicesDescription;
+  
+  const techLabel = document.querySelector('[data-slide="1"] .tech-label');
+  if (techLabel) techLabel.textContent = t.servicesTech;
+  
+  // Interface slide  
+  const interfaceCategory = document.querySelector('[data-slide="2"] .interface-category');
+  if (interfaceCategory) interfaceCategory.textContent = t.interfaceCategory;
+  
+  const interfaceTitle = document.querySelector('[data-slide="2"] h2');
+  if (interfaceTitle) interfaceTitle.innerHTML = t.interfaceTitle;
+  
+  const interfaceDesc = document.querySelector('[data-slide="2"] p');
+  if (interfaceDesc) interfaceDesc.textContent = t.interfaceDescription;
+  
+  // AI slide
+  const aiCategory = document.querySelector('[data-slide="3"] .ai-category');
+  if (aiCategory) aiCategory.textContent = t.aiCategory;
+  
+  const aiTitle = document.querySelector('[data-slide="3"] h2');
+  if (aiTitle) aiTitle.innerHTML = t.aiTitle;
+  
+  const aiDesc1 = document.querySelector('[data-slide="3"] p:first-of-type');
+  if (aiDesc1) aiDesc1.textContent = t.aiDescription1;
+  
+  const aiDesc2 = document.querySelector('[data-slide="3"] p:last-of-type');
+  if (aiDesc2) aiDesc2.textContent = t.aiDescription2;
+  
+  const aiCap = document.querySelector('[data-slide="3"] h4');
+  if (aiCap) aiCap.textContent = t.aiCapabilities;
+  
+  // Contact slide
+  const contactCategory = document.querySelector('[data-slide="7"] .contact-category');
+  if (contactCategory) contactCategory.textContent = t.contactCategory;
+  
+  const contactTitle = document.querySelector('[data-slide="7"] h2');
+  if (contactTitle) contactTitle.innerHTML = t.contactTitle;
+  
+  const contactDesc1 = document.querySelector('[data-slide="7"] p:first-of-type');
+  if (contactDesc1) contactDesc1.textContent = t.contactDescription1;
+  
+  const contactDesc2 = document.querySelector('[data-slide="7"] p:last-of-type');
+  if (contactDesc2) contactDesc2.textContent = t.contactDescription2;
+  
+  // Contact buttons
+  document.querySelectorAll('[onclick*="goToSlide(7)"]').forEach(btn => {
+    if (btn.textContent.includes('Kontakt') || btn.textContent.includes('Contact')) {
+      btn.textContent = t.contactButton;
+    }
+  });
+  
+  // Send message button
+  const sendBtn = document.querySelector('#contactFormMain button[type="submit"]');
+  if (sendBtn) sendBtn.textContent = t.sendMessage;
 }
 
 // Make language switcher globally available
@@ -964,63 +1496,115 @@ function calculateSavings() {
     '€' + Math.round(annualCostSavings).toLocaleString();
 }
 
-// Contact form handling
+/* ===== EMAILJS CONFIGURATION ===== */
+// Initialize EmailJS - you need to register at emailjs.com and get these values
+const EMAILJS_CONFIG = {
+  SERVICE_ID: 'YOUR_SERVICE_ID',    // Replace with your EmailJS service ID
+  TEMPLATE_ID: 'YOUR_TEMPLATE_ID',  // Replace with your EmailJS template ID
+  PUBLIC_KEY: 'YOUR_PUBLIC_KEY'     // Replace with your EmailJS public key
+};
+
+// Initialize EmailJS when DOM is loaded
+function initializeEmailJS() {
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+    console.log('EmailJS initialized');
+  } else {
+    console.warn('EmailJS library not loaded');
+  }
+}
+
+// Contact form handling with EmailJS
 function handleContactForm() {
-  const contactForm = document.getElementById('contactForm');
+  const contactForm = document.getElementById('contactFormMain');
   if (!contactForm) return;
   
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const formStatus = document.getElementById('formStatus');
+    const formStatus = document.getElementById('formStatusMain');
     const submitButton = contactForm.querySelector('button[type="submit"]');
     const originalButtonText = submitButton.textContent;
     
     // Show loading state
-    submitButton.textContent = 'Sending...';
+    submitButton.textContent = 'Wird gesendet...';
     submitButton.disabled = true;
     formStatus.style.display = 'none';
     
     // Get form data
     const formData = {
-      name: document.getElementById('contactName').value,
-      email: document.getElementById('contactEmail').value,
-      company: document.getElementById('contactCompany').value,
-      service: document.getElementById('contactService').value,
-      message: document.getElementById('contactMessage').value
+      name: document.getElementById('contactNameMain').value,
+      email: document.getElementById('contactEmailMain').value,
+      company: document.getElementById('contactCompanyMain').value || 'Nicht angegeben',
+      service: document.getElementById('contactServiceMain').value || 'Nicht angegeben',
+      message: document.getElementById('contactMessageMain').value
     };
     
     try {
-      // Simulate email sending (replace with actual email service)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Show success message
-      formStatus.textContent = 'Thank you! Your message has been sent successfully. We\'ll get back to you within 24 hours.';
-      formStatus.className = 'success';
-      formStatus.style.display = 'block';
-      
-      // Reset form
-      contactForm.reset();
-      
-      // Log form data for now (replace with actual email service)
-      console.log('Contact form submission:', formData);
+      // Check if EmailJS is configured
+      if (EMAILJS_CONFIG.SERVICE_ID === 'YOUR_SERVICE_ID') {
+        // Fallback: Log to console and show success (for testing)
+        console.log('Contact form submission (EmailJS not configured):', formData);
+        
+        // Simulate sending delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Show success message
+        formStatus.textContent = 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns innerhalb von 24 Stunden zurück.';
+        formStatus.style.background = 'rgba(76, 175, 80, 0.1)';
+        formStatus.style.color = '#4CAF50';
+        formStatus.style.border = '1px solid rgba(76, 175, 80, 0.3)';
+        formStatus.style.display = 'block';
+        
+        // Reset form
+        contactForm.reset();
+        
+      } else {
+        // Send email using EmailJS
+        const result = await emailjs.send(
+          EMAILJS_CONFIG.SERVICE_ID,
+          EMAILJS_CONFIG.TEMPLATE_ID,
+          {
+            from_name: formData.name,
+            from_email: formData.email,
+            company: formData.company,
+            service: formData.service,
+            message: formData.message,
+            to_email: 'info@effiprozess.de'
+          }
+        );
+        
+        console.log('EmailJS Success:', result);
+        
+        // Show success message
+        formStatus.textContent = 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns innerhalb von 24 Stunden zurück.';
+        formStatus.style.background = 'rgba(76, 175, 80, 0.1)';
+        formStatus.style.color = '#4CAF50';
+        formStatus.style.border = '1px solid rgba(76, 175, 80, 0.3)';
+        formStatus.style.display = 'block';
+        
+        // Reset form
+        contactForm.reset();
+      }
       
     } catch (error) {
-      // Show error message
-      formStatus.textContent = 'Sorry, there was an error sending your message. Please try again or contact us directly.';
-      formStatus.className = 'error';
-      formStatus.style.display = 'block';
-      
       console.error('Contact form error:', error);
+      
+      // Show error message
+      formStatus.textContent = 'Entschuldigung, beim Senden Ihrer Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.';
+      formStatus.style.background = 'rgba(244, 67, 54, 0.1)';
+      formStatus.style.color = '#F44336';
+      formStatus.style.border = '1px solid rgba(244, 67, 54, 0.3)';
+      formStatus.style.display = 'block';
     } finally {
       // Reset button
       submitButton.textContent = originalButtonText;
       submitButton.disabled = false;
       
-      // Hide status message after 5 seconds
+      // Hide status message after 6 seconds
       setTimeout(() => {
         formStatus.style.display = 'none';
-      }, 5000);
+      }, 6000);
     }
   });
 }
