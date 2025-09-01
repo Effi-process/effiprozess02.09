@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Effiprocess Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; }
+    .slide { 
+      position: absolute; 
+      top: 0; left: 0; 
+      width: 100vw; height: 100vh; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .slide.active { opacity: 1; }
+    .slide:nth-child(1) { background: #f0f0f0; }
+    .slide:nth-child(2) { background: #e0e0e0; }
+    .slide:nth-child(3) { background: #d0d0d0; }
+    .nav { 
+      position: fixed; 
+      bottom: 20px; 
+      right: 20px; 
+      z-index: 1000; 
+    }
+    button { 
+      padding: 10px 15px; 
+      margin: 5px; 
+      background: #a078c8; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+    }
+  </style>
+</head>
+<body>
+  <div class="slide active">
+    <h1>Slide 1 - Hero (01/08)</h1>
+  </div>
+  
+  <div class="slide">
+    <h1>Slide 2 - Services (02/08)</h1>
+  </div>
+  
+  <div class="slide">
+    <h1>Slide 3 - Contact (03/08)</h1>
+  </div>
+  
+  <div class="nav">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <button onclick="nextSlide()">Next ▶</button>
+    <div>Current: <span id="current">1</span>/3</div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const currentDisplay = document.getElementById('current');
+    
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[index].classList.add('active');
+      currentDisplay.textContent = index + 1;
+      console.log('Showing slide:', index + 1);
+    }
+    
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        showSlide(currentSlide);
+      }
+    }
+    
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        showSlide(currentSlide);
+      }
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+    });
+    
+    console.log('Test page loaded successfully. Found', slides.length, 'slides');
+  </script>
+</body>
+</html>

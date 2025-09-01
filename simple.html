@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Effiprocess - Simple Version</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: #ffffff;
+      border-bottom: 1px solid #cccccc;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .header-logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #808080;
+      cursor: pointer;
+    }
+
+    /* Slides */
+    .slide {
+      position: absolute;
+      top: 56px;
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 56px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      background: #fff;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-content {
+      text-align: center;
+      max-width: 800px;
+      padding: 20px;
+    }
+
+    .slide h1 {
+      font-size: 3rem;
+      font-weight: 300;
+      color: #333;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .slide p {
+      font-size: 1.1rem;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .slide-number {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-family: 'SF Mono', Monaco, monospace;
+      color: #a078c8;
+      font-size: 1.2rem;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nav button {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .nav button:hover {
+      background: #a078c8;
+      color: white;
+      border-color: #a078c8;
+    }
+
+    /* Contact Form */
+    .contact-form {
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(160, 120, 200, 0.15);
+      border: 2px solid rgba(160, 120, 200, 0.2);
+      max-width: 400px;
+      margin: 20px auto;
+    }
+
+    .contact-form h3 {
+      color: #a078c8;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .contact-form input,
+    .contact-form textarea,
+    .contact-form select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .contact-form button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #a078c8, #b088d8);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .contact-form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(160, 120, 200, 0.3);
+    }
+
+    /* Calculator */
+    .calculator {
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(160, 120, 200, 0.15);
+      border: 2px solid rgba(160, 120, 200, 0.2);
+      max-width: 400px;
+      margin: 20px auto;
+    }
+
+    .calculator h3 {
+      color: #a078c8;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .calculator select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .results {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #e8e8e8;
+      margin-top: 20px;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .result-value {
+      font-weight: 700;
+      color: #a078c8;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-logo" onclick="goToSlide(0)">Effiprocess</div>
+  </header>
+
+  <!-- Navigation -->
+  <div class="nav">
+    <button onclick="prevSlide()" title="Previous">▲</button>
+    <button onclick="nextSlide()" title="Next">▼</button>
+  </div>
+
+  <!-- Slide 1: Hero -->
+  <div class="slide active">
+    <div class="slide-content">
+      <h1>Modern websites<br>interfaces<br>artificial intelligence<br>for your<br><span style="color: #a078c8;">efficient processes</span></h1>
+      <p>We build modern websites, intelligent user interfaces and AI-powered automation solutions that streamline your business processes.</p>
+    </div>
+    <div class="slide-number">01/08</div>
+  </div>
+
+  <!-- Slide 2: Services -->
+  <div class="slide">
+    <div class="slide-content">
+      <h1>Modern websites that drive<br/>your business forward.</h1>
+      <p>We create responsive, high-performance websites with cutting-edge technologies. From concept to deployment, we ensure your digital presence stands out with seamless user experiences and powerful backend solutions.</p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px;">
+        <div style="text-align: center;">
+          <div style="width: 60px; height: 60px; background: rgba(160, 120, 200, 0.1); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: #a078c8; font-weight: bold;">P</div>
+          <div style="font-weight: 600; margin-bottom: 5px;">Performance First</div>
+          <div style="font-size: 0.9rem; color: #666;">Lightning-fast loading times</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="width: 60px; height: 60px; background: rgba(160, 120, 200, 0.1); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: #a078c8; font-weight: bold;">R</div>
+          <div style="font-weight: 600; margin-bottom: 5px;">Responsive Design</div>
+          <div style="font-size: 0.9rem; color: #666;">Perfect on all devices</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="width: 60px; height: 60px; background: rgba(160, 120, 200, 0.1); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: #a078c8; font-weight: bold;">S</div>
+          <div style="font-weight: 600; margin-bottom: 5px;">SEO Optimized</div>
+          <div style="font-size: 0.9rem; color: #666;">Built for search engines</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">02/08</div>
+  </div>
+
+  <!-- Slide 3: Interfaces -->
+  <div class="slide">
+    <div class="slide-content">
+      <h1>At its heart, interface isn't<br/>about structures.<br/>It's about people.</h1>
+      <p>We strive to go above and beyond for our clients, fostering a relationship built on trust, confidence and honesty. We think the most satisfying part of what we do is that we get to work with so many wonderful people.</p>
+    </div>
+    <div class="slide-number">03/08</div>
+  </div>
+
+  <!-- Slide 4: AI Systems -->
+  <div class="slide">
+    <div class="slide-content">
+      <h1>Intelligent automation<br/>that thinks and acts<br/>like your best employee.</h1>
+      <p>Our AI agents don't just follow scripts—they understand context, make decisions, and adapt to your business needs. From customer service to data analysis, they work 24/7 to streamline your operations while maintaining the human touch your customers expect.</p>
+    </div>
+    <div class="slide-number">04/08</div>
+  </div>
+
+  <!-- Slide 5: Problems vs Solutions -->
+  <div class="slide" style="background: #000;">
+    <div class="slide-content" style="color: white;">
+      <h1>We solve every concern.</h1>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+        <div>
+          <h3 style="color: #ccc; margin-bottom: 20px;">Customer Concerns</h3>
+          <div style="margin-bottom: 15px;">• GDPR Compliance</div>
+          <div style="margin-bottom: 15px;">• IT Security</div>
+          <div style="margin-bottom: 15px;">• AI Hallucinations</div>
+          <div style="margin-bottom: 15px;">• System Integration</div>
+          <div>• Cost Control</div>
+        </div>
+        <div>
+          <h3 style="color: #a078c8; margin-bottom: 20px;">Our Solutions</h3>
+          <div style="margin-bottom: 15px;">• EU Hosting & Compliance</div>
+          <div style="margin-bottom: 15px;">• Enterprise Security</div>
+          <div style="margin-bottom: 15px;">• Reliability Engineering</div>
+          <div style="margin-bottom: 15px;">• Seamless Integration</div>
+          <div>• Transparent Pricing</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">05/08</div>
+  </div>
+
+  <!-- Slide 6: Solutions Overview -->
+  <div class="slide">
+    <div class="slide-content">
+      <h1>Comprehensive solutions tailored to<br/>your business needs.</h1>
+      <p>We provide end-to-end solutions that combine cutting-edge technology with strategic thinking. From initial concept to final deployment, our integrated approach ensures your digital transformation drives measurable results.</p>
+    </div>
+    <div class="slide-number">06/08</div>
+  </div>
+
+  <!-- Slide 7: Calculator -->
+  <div class="slide">
+    <div class="slide-content">
+      <h1>Calculate your automation ROI.</h1>
+      <div class="calculator">
+        <h3>ROI Calculator</h3>
+        <select id="tasksPerDay" onchange="calculateSavings()">
+          <option value="">Daily Tasks</option>
+          <option value="5">5 tasks</option>
+          <option value="10">10 tasks</option>
+          <option value="20">20 tasks</option>
+          <option value="50">50+ tasks</option>
+        </select>
+        <select id="minutesPerTask" onchange="calculateSavings()">
+          <option value="">Task Duration</option>
+          <option value="5">5 minutes</option>
+          <option value="15">15 minutes</option>
+          <option value="30">30 minutes</option>
+          <option value="60">1 hour</option>
+        </select>
+        <select id="employees" onchange="calculateSavings()">
+          <option value="">Team Size</option>
+          <option value="1">1 employee</option>
+          <option value="5">5 employees</option>
+          <option value="10">10 employees</option>
+          <option value="20">20+ employees</option>
+        </select>
+        <div class="results">
+          <div class="result-item">
+            <span>Annual Hours Saved:</span>
+            <span class="result-value" id="hoursSaved">--</span>
+          </div>
+          <div class="result-item">
+            <span>Cost Savings:</span>
+            <span class="result-value" id="costSaved">--</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">07/08</div>
+  </div>
+
+  <!-- Slide 8: Contact -->
+  <div class="slide">
+    <div class="slide-content">
+      <h1>Ready to transform your business?</h1>
+      <div class="contact-form">
+        <h3>Get in Touch</h3>
+        <form id="contactForm" onsubmit="submitForm(event)">
+          <input type="text" placeholder="Your Name *" required>
+          <input type="email" placeholder="Email Address *" required>
+          <input type="text" placeholder="Company Name">
+          <select>
+            <option value="">Service Interest</option>
+            <option value="websites">Modern Websites</option>
+            <option value="ai">AI Automation</option>
+            <option value="consultation">Consultation</option>
+          </select>
+          <textarea rows="4" placeholder="Tell us about your project..."></textarea>
+          <button type="submit">Send Message</button>
+        </form>
+        <div id="formStatus" style="margin-top: 15px; text-align: center; display: none;"></div>
+      </div>
+    </div>
+    <div class="slide-number">08/08</div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[index].classList.add('active');
+      
+      // Update header visibility (hide on problems slide)
+      const header = document.querySelector('.header');
+      header.style.display = index === 4 ? 'none' : 'block';
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        showSlide(currentSlide);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        showSlide(currentSlide);
+      }
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      showSlide(currentSlide);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      switch(e.key) {
+        case 'ArrowUp':
+        case 'PageUp':
+          prevSlide();
+          break;
+        case 'ArrowDown':
+        case 'PageDown':
+          nextSlide();
+          break;
+        case 'Home':
+          goToSlide(0);
+          break;
+        case 'End':
+          goToSlide(totalSlides - 1);
+          break;
+      }
+    });
+
+    // Scroll navigation
+    let scrollTimeout;
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        if (e.deltaY > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }, 100);
+    }, { passive: false });
+
+    // Calculator
+    function calculateSavings() {
+      const tasks = document.getElementById('tasksPerDay').value;
+      const minutes = document.getElementById('minutesPerTask').value;
+      const employees = document.getElementById('employees').value;
+
+      if (!tasks || !minutes || !employees) {
+        document.getElementById('hoursSaved').textContent = '--';
+        document.getElementById('costSaved').textContent = '--';
+        return;
+      }
+
+      const dailyMinutes = parseInt(tasks) * parseInt(minutes);
+      const annualHours = (dailyMinutes * 250 * parseInt(employees)) / 60; // 250 work days
+      const hourlyRate = 36; // €36 per hour
+      const costSavings = annualHours * hourlyRate;
+
+      document.getElementById('hoursSaved').textContent = Math.round(annualHours).toLocaleString() + ' hours';
+      document.getElementById('costSaved').textContent = '€' + Math.round(costSavings).toLocaleString();
+    }
+
+    // Contact form
+    function submitForm(event) {
+      event.preventDefault();
+      const status = document.getElementById('formStatus');
+      status.style.display = 'block';
+      status.style.color = '#4CAF50';
+      status.textContent = 'Thank you! Your message has been sent successfully.';
+      event.target.reset();
+    }
+
+    console.log('Simple Effiprocess page loaded successfully');
+  </script>
+</body>
+</html>

@@ -134,7 +134,7 @@ body {
   right: 0;
   z-index: 1000;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start !important;
   align-items: center;
   transition: background-color .35s ease, border-color .35s ease;
 }
@@ -169,7 +169,7 @@ body.is-dark .header-logo {
   width: 56px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -1286,5 +1286,68 @@ body.is-dark .header-logo {
     height: 40%;
     bottom: 0;
     right: 0;
+  }
+}
+
+/* ===== CONTACT FORM STYLING ===== */
+.contact {
+  background: #ffffff;
+  position: relative;
+  height: 100vh;
+  display: block !important;
+  z-index: 10;
+}
+
+/* Contact form input focus states */
+#contactForm input:focus,
+#contactForm select:focus,
+#contactForm textarea:focus {
+  outline: none;
+  border-color: #a078c8;
+  box-shadow: 0 0 0 2px rgba(160, 120, 200, 0.1);
+}
+
+/* Contact form button hover effect */
+#contactForm button:hover {
+  background: linear-gradient(135deg, #8a5fb0, #9a6fc0);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(160, 120, 200, 0.3);
+}
+
+/* Form status messages */
+#formStatus.success {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  display: block !important;
+}
+
+#formStatus.error {
+  background: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  display: block !important;
+}
+
+/* Contact form responsive design */
+@media (max-width: 768px) {
+  .contact .contact-content {
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .contact .contact-form-container {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .contact .contact-text-section {
+    text-align: center;
+    margin-bottom: 30px;
   }
 }

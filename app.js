@@ -54,8 +54,8 @@ function goToSlide(nextIndex) {
   nextEl.classList.add('is-active');
   nextEl.classList.remove('is-entering');
 
-  // Header-Theme via Body-Klasse (assuming slide 4 is dark)
-  document.body.classList.toggle('is-dark', next === 4);
+  // Header-Theme - keine slides mehr als dark
+  document.body.classList.remove('is-dark');
 
   // ARIA for screen readers
   slides.forEach((el, i) => {
@@ -73,15 +73,15 @@ function goToSlide(nextIndex) {
 
   currentSlide = next;
   
-  // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite, Probleme-Seite, Solutions-Seite und Calculator-Seite
+  // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite, Probleme-Seite, Solutions-Seite, Calculator-Seite und Contact-Seite
   const canvas = document.getElementById('dotAnimation');
   if (canvas) {
-    canvas.style.display = (currentSlide === 2 || currentSlide === 3 || currentSlide === 4 || currentSlide === 5 || currentSlide === 6) ? 'none' : 'block';
+    canvas.style.display = (currentSlide >= 2) ? 'none' : 'block';
   }
 
-  // Hide header on slide 5 (solutions page), show on all others  
+  // Hide header on slide 4 (solutions page), show on all others  
   const header = document.querySelector('.header');
-  if (currentSlide === 5) { // Slide 5 only
+  if (currentSlide === 4) { // Slide 4 (problems/solutions) only
     header.style.display = 'none';
   } else {
     header.style.display = 'block';
@@ -553,17 +553,27 @@ function startLoadingAnimation() {
   const progressNumber = document.getElementById('progressNumber');
   const progressFill = document.getElementById('progressFill');
   
+  if (!progressNumber || !progressFill) {
+    console.error('Loading elements not found');
+    completeLoading(); // Skip loading if elements missing
+    return;
+  }
+  
   let progress = 0;
   const interval = setInterval(() => {
     progress += Math.random() * 8 + 3;
     if (progress >= 100) {
       progress = 100;
       clearInterval(interval);
+      // Auto-complete loading after reaching 100%
+      setTimeout(() => {
+        completeLoading();
+      }, 500);
     }
     
-    if (progressNumber) progressNumber.textContent = Math.floor(progress);
-    if (progressFill) progressFill.style.width = progress + '%';
-  }, 80);
+    progressNumber.textContent = Math.floor(progress);
+    progressFill.style.width = progress + '%';
+  }, 60); // Faster loading
 }
 
 function completeLoading() {
@@ -644,40 +654,60 @@ async function loadAIIcon() {
 
 /* ===== INITIALIZATION ===== */
 document.addEventListener('DOMContentLoaded', () => {
-  // Start loading animation
-  startLoadingAnimation();
+  console.log('DOM Content Loaded');
   
-  // Complete loading after 3 seconds
+  try {
+    // Start loading animation
+    startLoadingAnimation();
+    
+    // Initialize slides immediately
+    refreshSlides();
+    console.log('Found', slides.length, 'slides');
+    
+    // Fallback: Complete loading after 4 seconds if not auto-completed
+    setTimeout(() => {
+      const loadingScreen = document.getElementById('loadingScreen');
+      if (loadingScreen && loadingScreen.style.display !== 'none') {
+        console.log('Loading timeout - forcing completion');
+        completeLoading();
+      }
+    }, 4000);
+  } catch (error) {
+    console.error('Initialization error:', error);
+    completeLoading(); // Force complete on any error
+  }
+
+  // Initialize slides after a brief delay to ensure DOM is ready
   setTimeout(() => {
-    completeLoading();
-  }, 3000);
-
-  refreshSlides();
-
-  // Startzustand: nur Slide 0 aktiv, keine Inline-Styles nötig
-  slides.forEach((el, i) => {
-    // Clean slate - remove old classes and inline styles
-    el.classList.remove('is-entering', 'is-leaving', 'is-active', 'active');
-    el.style.display = '';
-    el.style.visibility = '';
-    el.style.opacity = '';
-    el.style.transform = '';
-    el.style.filter = '';
-    el.style.pointerEvents = '';
-    el.style.transition = '';
-    el.style.zIndex = '';
+    refreshSlides(); // Refresh slides array
     
-    // Set initial state
-    if (i === 0) {
-      el.classList.add('is-active');
-    }
+    // Startzustand: nur Slide 0 aktiv, keine Inline-Styles nötig
+    slides.forEach((el, i) => {
+      // Clean slate - remove old classes and inline styles
+      el.classList.remove('is-entering', 'is-leaving', 'is-active', 'active');
+      el.style.display = '';
+      el.style.visibility = '';
+      el.style.opacity = '';
+      el.style.transform = '';
+      el.style.filter = '';
+      el.style.pointerEvents = '';
+      el.style.transition = '';
+      el.style.zIndex = '';
+      
+      // Set initial state
+      if (i === 0) {
+        el.classList.add('is-active');
+      }
+      
+      // ARIA setup
+      el.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
+    });
     
-    // ARIA setup
-    el.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
-  });
+    console.log('Slides initialized:', slides.length);
+  }, 100);
 
-  // Header-Theme für Start
-  document.body.classList.toggle('is-dark', currentSlide === 4);
+  // Header-Theme für Start - keine dark slides mehr
+  document.body.classList.remove('is-dark');
 
   // Carousel DOM holen (falls es existiert)
   track = document.getElementById('servicesTrack');
@@ -691,13 +721,27 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCarouselArrows();
   updateProblemsArrows();
 
-  bubbleAnimation = new OrganicBubbleAnimation();
+  // Initialize bubble animation with error handling
+  try {
+    bubbleAnimation = new OrganicBubbleAnimation();
+    console.log('Bubble animation initialized');
+  } catch (error) {
+    console.warn('Bubble animation failed to initialize:', error);
+  }
   
   // Load the header logo
-  loadHeaderLogo();
+  try {
+    loadHeaderLogo();
+  } catch (error) {
+    console.warn('Logo loading failed:', error);
+  }
   
   // Load the AI icon for slide 3
-  loadAIIcon();
+  try {
+    loadAIIcon();
+  } catch (error) {
+    console.warn('AI icon loading failed:', error);
+  }
 });
 
 // Utility function for header click
@@ -745,6 +789,67 @@ function calculateSavings() {
     '€' + Math.round(annualCostSavings).toLocaleString();
 }
 
+// Contact form handling
+function handleContactForm() {
+  const contactForm = document.getElementById('contactForm');
+  if (!contactForm) return;
+  
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formStatus = document.getElementById('formStatus');
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    
+    // Show loading state
+    submitButton.textContent = 'Sending...';
+    submitButton.disabled = true;
+    formStatus.style.display = 'none';
+    
+    // Get form data
+    const formData = {
+      name: document.getElementById('contactName').value,
+      email: document.getElementById('contactEmail').value,
+      company: document.getElementById('contactCompany').value,
+      service: document.getElementById('contactService').value,
+      message: document.getElementById('contactMessage').value
+    };
+    
+    try {
+      // Simulate email sending (replace with actual email service)
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Show success message
+      formStatus.textContent = 'Thank you! Your message has been sent successfully. We\'ll get back to you within 24 hours.';
+      formStatus.className = 'success';
+      formStatus.style.display = 'block';
+      
+      // Reset form
+      contactForm.reset();
+      
+      // Log form data for now (replace with actual email service)
+      console.log('Contact form submission:', formData);
+      
+    } catch (error) {
+      // Show error message
+      formStatus.textContent = 'Sorry, there was an error sending your message. Please try again or contact us directly.';
+      formStatus.className = 'error';
+      formStatus.style.display = 'block';
+      
+      console.error('Contact form error:', error);
+    } finally {
+      // Reset button
+      submitButton.textContent = originalButtonText;
+      submitButton.disabled = false;
+      
+      // Hide status message after 5 seconds
+      setTimeout(() => {
+        formStatus.style.display = 'none';
+      }, 5000);
+    }
+  });
+}
+
 // Initialize calculator with empty state
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
@@ -753,5 +858,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('hoursSaved').textContent = '--';
       document.getElementById('costSaved').textContent = '--';
     }
+    
+    // Initialize contact form
+    handleContactForm();
   }, 100);
 });
