@@ -530,19 +530,19 @@ button:hover {
     padding: 15px;
   }
   
-  /* Services slide mobile - COMPLETE REDESIGN */
+  /* Services slide mobile - OPTIMIZED LAYOUT */
   .slide[data-slide="1"] {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: 60px 20px 80px 20px !important;
+    padding: 80px 25px 100px 25px !important;
   }
   
   .slide[data-slide="1"] > div {
     position: relative !important;
     width: 100% !important;
-    max-width: 400px !important;
+    max-width: 350px !important;
     height: auto !important;
     padding: 0 !important;
     display: block !important;
@@ -551,45 +551,83 @@ button:hover {
   }
   
   .slide[data-slide="1"] .services-category {
-    font-size: 0.75rem !important;
-    margin-bottom: 15px !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.1em !important;
+    margin-bottom: 20px !important;
+    color: #a078c8 !important;
   }
   
   .slide[data-slide="1"] h2 {
-    font-size: 1.8rem !important;
-    line-height: 1.2 !important;
-    margin-bottom: 20px !important;
+    font-size: 2rem !important;
+    line-height: 1.15 !important;
+    margin-bottom: 25px !important;
+    color: #333 !important;
+    font-weight: 300 !important;
   }
   
   .slide[data-slide="1"] p {
-    font-size: 0.85rem !important;
-    line-height: 1.5 !important;
-    margin-bottom: 25px !important;
+    font-size: 0.9rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 30px !important;
+    color: #666 !important;
+    max-width: 320px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
   
-  /* Features grid mobile - simple list */
+  /* Features grid mobile - clean card layout */
   .slide[data-slide="1"] div[style*="grid-template-columns"] {
     display: flex !important;
     flex-direction: column !important;
-    gap: 12px !important;
-    margin-bottom: 25px !important;
+    gap: 15px !important;
+    margin-bottom: 30px !important;
+    max-width: 320px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
   
   .slide[data-slide="1"] div[style*="padding: 12px 0"] {
-    padding: 12px 15px !important;
-    background: rgba(160, 120, 200, 0.05) !important;
-    border-radius: 8px !important;
+    padding: 18px 20px !important;
+    background: rgba(160, 120, 200, 0.08) !important;
+    border-radius: 12px !important;
     border-bottom: none !important;
+    box-shadow: 0 2px 8px rgba(160, 120, 200, 0.1) !important;
   }
   
-  /* Tech tags mobile */
+  .slide[data-slide="1"] div[style*="padding: 12px 0"] div:first-child {
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 6px !important;
+    color: #333 !important;
+  }
+  
+  .slide[data-slide="1"] div[style*="padding: 12px 0"] div:last-child {
+    font-size: 0.75rem !important;
+    color: #666 !important;
+  }
+  
+  /* Tech section mobile */
+  .slide[data-slide="1"] div[style*="margin-top: 20px"] {
+    margin-top: 30px !important;
+    margin-bottom: 0 !important;
+  }
+  
+  .slide[data-slide="1"] .tech-label {
+    font-size: 0.8rem !important;
+    margin-bottom: 15px !important;
+    color: #666 !important;
+  }
+  
   .slide[data-slide="1"] div[style*="display: flex; flex-wrap: wrap"] {
     justify-content: center !important;
+    max-width: 280px !important;
+    margin: 0 auto !important;
   }
   
   .slide[data-slide="1"] span[style*="background: rgba(160, 120, 200, 0.1)"] {
-    font-size: 0.65rem !important;
-    padding: 4px 8px !important;
+    font-size: 0.7rem !important;
+    padding: 6px 10px !important;
+    margin: 2px !important;
   }
   
   /* Hide portfolio gallery on mobile ONLY */
@@ -597,19 +635,19 @@ button:hover {
     display: none !important;
   }
   
-  /* Interface slide mobile - COMPLETE REDESIGN */
+  /* Interface slide mobile - OPTIMIZED LAYOUT */
   .slide[data-slide="2"] {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: 60px 20px 80px 20px !important;
+    padding: 80px 25px 120px 25px !important;
   }
   
   .slide[data-slide="2"] > div {
     position: relative !important;
     width: 100% !important;
-    max-width: 400px !important;
+    max-width: 350px !important;
     height: auto !important;
     padding: 0 !important;
     display: block !important;
@@ -618,20 +656,28 @@ button:hover {
   }
   
   .slide[data-slide="2"] .interface-category {
-    font-size: 0.75rem !important;
-    margin-bottom: 15px !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.1em !important;
+    margin-bottom: 20px !important;
+    color: #a078c8 !important;
   }
   
   .slide[data-slide="2"] h2 {
-    font-size: 1.8rem !important;
-    line-height: 1.2 !important;
-    margin-bottom: 20px !important;
+    font-size: 2rem !important;
+    line-height: 1.15 !important;
+    margin-bottom: 25px !important;
+    color: #333 !important;
+    font-weight: 300 !important;
   }
   
   .slide[data-slide="2"] p {
-    font-size: 0.85rem !important;
-    line-height: 1.5 !important;
-    margin-bottom: 25px !important;
+    font-size: 0.9rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 30px !important;
+    color: #666 !important;
+    max-width: 320px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
   
   /* Hide interface gallery on mobile ONLY */
@@ -951,10 +997,15 @@ button:hover {
   
   /* Adjust contact buttons for mobile */
   div[onclick*="goToSlide(7)"] {
-    bottom: 15px !important;
-    right: 15px !important;
-    padding: 6px 12px !important;
-    font-size: 0.7rem !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    left: 20px !important;
+    width: calc(100% - 40px) !important;
+    text-align: center !important;
+    padding: 12px 20px !important;
+    font-size: 0.8rem !important;
+    border-radius: 25px !important;
+    margin: 0 !important;
   }
   
   /* Technology tags mobile */
