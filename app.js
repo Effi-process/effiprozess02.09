@@ -141,6 +141,17 @@ function bindVerticalArrows(){
 
   window.addEventListener('keydown', (e) => {
     if (e.repeat) return;
+    
+    // Check if we're in a gallery and handle gallery navigation first
+    if (currentSlide === 1 && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+      // Portfolio gallery navigation handled in bindPortfolioControls
+      return;
+    }
+    if (currentSlide === 2 && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+      // Interface gallery navigation handled in bindInterfaceControls
+      return;
+    }
+    
     switch(e.key){
       case 'ArrowUp':
       case 'PageUp':   goToSlide(currentSlide - 1); break;
@@ -369,8 +380,15 @@ function bindPortfolioControls() {
   window.addEventListener('keydown', (e) => {
     if (currentSlide !== 1) return; // Only on services slide
     if (e.repeat) return;
-    if (e.key === 'ArrowLeft') leftBtn.click();
-    if (e.key === 'ArrowRight') rightBtn.click();
+    console.log('Portfolio navigation key pressed:', e.key, 'Current slide:', currentSlide);
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      leftBtn.click();
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      rightBtn.click();
+    }
   });
 
   updatePortfolioGallery();
@@ -899,25 +917,15 @@ async function loadRelocatoLogo() {
           // Find the avatar circle with "R"
           const avatarCircle = testimonial.querySelector('[style*="background: linear-gradient(135deg, #bdc887, #d4e195)"]');
           if (avatarCircle) {
-            // Replace the "R" with the actual logo
-            avatarCircle.innerHTML = '';
-            const logoImg = document.createElement('img');
-            logoImg.src = './Bildschirmfoto 2025-09-02 um 00.17.11.png';
-            logoImg.alt = 'Relocato Logo';
-            logoImg.style.cssText = `
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-              border-radius: 16px;
-            `;
-            avatarCircle.appendChild(logoImg);
+            // Put back the "R" instead of logo
+            avatarCircle.innerHTML = '<span style="font-size: 1.5rem; font-weight: 700; color: #737c51;">R</span>';
           }
           break;
         }
       }
     }
   } catch (error) {
-    console.log('Relocato logo could not be loaded:', error);
+    console.log('Relocato logo fallback applied:', error);
   }
 }
 
