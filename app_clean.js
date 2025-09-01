@@ -178,6 +178,133 @@ function updateActiveMenuItem() {
 }
 
 /* ===== LANGUAGE SWITCHER ===== */
+const translations = {
+  de: {
+    // Navigation
+    navStart: 'Start',
+    navWebsites: 'Moderne Websites',
+    navInterfaces: 'Benutzeroberflächen', 
+    navAI: 'KI-Automatisierung',
+    navProblems: 'Probleme & Lösungen',
+    navWorkflow: 'Workflow Integration',
+    navCalculator: 'Rechner',
+    navContact: '07 Kontakt',
+    
+    // Hero
+    heroWebsites: 'Moderne Websites',
+    heroInterfaces: 'Benutzeroberflächen',
+    heroAI: 'künstliche Intelligenz',
+    heroFor: 'für Ihre',
+    heroProcesses: 'effizienten Prozesse',
+    
+    // Services
+    servicesCategory: 'WEBSITE SOLUTIONS',
+    servicesTitle: 'Moderne Websites, die Ihr<br/>Unternehmen voranbringen.',
+    servicesDescription: 'Wir erstellen responsive, hochperformante Websites mit modernsten Technologien. Von der Konzeption bis zur Bereitstellung sorgen wir dafür, dass Ihre digitale Präsenz mit nahtlosen Benutzererfahrungen und leistungsstarken Backend-Lösungen hervorsticht.',
+    servicesTech: 'Verwendete Technologien:',
+    
+    // Interface
+    interfaceCategory: 'ANGEPASSTE INTERFACES',
+    interfaceTitle: 'Maßgeschneiderte<br/>Benutzeroberflächen für<br/>Ihre spezifischen Anforderungen.',
+    interfaceDescription: 'Wir entwickeln Interfaces, die präzise auf Ihre Geschäftsprozesse und Nutzeranforderungen zugeschnitten sind. Durch intensive Analyse Ihrer Workflows schaffen wir intuitive Lösungen, die komplexe Aufgaben vereinfachen und die Produktivität Ihrer Teams maximieren.',
+    
+    // AI
+    aiCategory: 'KI-AGENTEN SYSTEME',
+    aiTitle: 'Intelligente Automatisierung,<br/>die komplexe Aufgaben übernimmt.',
+    aiDescription1: 'Unsere AI-Agenten übernehmen komplexe Aufgaben teilweise bis vollständig. Sie verstehen Kontext, treffen Entscheidungen und passen sich an Ihre Geschäftsprozesse an.',
+    aiDescription2: 'Durch intelligente Integration können wir in verschiedene Programme eintauchen und dort direkt mit AI arbeiten – von Kundenservice über Datenanalyse bis hin zu automatisierten Workflows, die rund um die Uhr für Sie arbeiten.',
+    aiCapabilities: 'Kernfähigkeiten',
+    
+    // Problems & Solutions
+    problemsTitle: 'Was hält Sie von KI ab?',
+    problemsCategory: 'KUNDENBEDENKEN',
+    solutionsTitle: 'Wir lösen jede Sorge.',
+    solutionsCategory: 'UNSERE LÖSUNGEN',
+    
+    // Workflow Integration
+    workflowCategory: 'WORKFLOW INTEGRATION',
+    workflowTitle: 'Wie unsere Services<br/>nahtlos zusammenarbeiten.',
+    workflowDescription: 'Moderne Websites bilden das Fundament, intuitive Benutzeroberflächen begeistern Ihre Nutzer und KI-Automatisierung optimiert Ihre Abläufe. Zusammen schaffen sie leistungsstarke digitale Ökosysteme, die mit Ihrem Unternehmenswachstum skalieren.',
+    
+    // Calculator
+    calculatorCategory: 'Kundenerfolgsgeschichten',
+    calculatorTitle: 'Echte Ergebnisse von<br/>zufriedenen Kunden.',
+    
+    // Contact
+    contactCategory: 'Kontakt',
+    contactTitle: 'Bereit, Ihr Unternehmen<br/>zu transformieren?',
+    contactDescription1: 'Kontaktieren Sie unser Team, um zu erfahren, wie wir Ihre Prozesse optimieren können.',
+    contactDescription2: 'Senden Sie uns eine Nachricht und wir melden uns innerhalb von 24 Stunden zurück.',
+    contactButton: 'Kontakt',
+    
+    // Buttons
+    sendMessage: 'Nachricht senden'
+  },
+  en: {
+    // Navigation
+    navStart: 'Start',
+    navWebsites: 'Modern Websites',
+    navInterfaces: 'User Interfaces',
+    navAI: 'AI Automation', 
+    navProblems: 'Problems & Solutions',
+    navWorkflow: 'Workflow Integration',
+    navCalculator: 'Calculator',
+    navContact: '07 Contact',
+    
+    // Hero
+    heroWebsites: 'Modern websites',
+    heroInterfaces: 'interfaces',
+    heroAI: 'artificial intelligence',
+    heroFor: 'for your',
+    heroProcesses: 'efficient processes',
+    
+    // Services
+    servicesCategory: 'WEBSITE SOLUTIONS',
+    servicesTitle: 'Modern websites that drive<br/>your business forward.',
+    servicesDescription: 'We create responsive, high-performance websites with cutting-edge technologies. From concept to deployment, we ensure your digital presence stands out with seamless user experiences and powerful backend solutions.',
+    servicesTech: 'Technologies we use:',
+    
+    // Interface
+    interfaceCategory: 'CUSTOM INTERFACES',
+    interfaceTitle: 'Tailored<br/>user interfaces for<br/>your specific requirements.',
+    interfaceDescription: 'We develop interfaces that are precisely tailored to your business processes and user requirements. Through intensive analysis of your workflows, we create intuitive solutions that simplify complex tasks and maximize your team productivity.',
+    
+    // AI
+    aiCategory: 'AI AGENT SYSTEMS',
+    aiTitle: 'Intelligent automation<br/>that takes over complex tasks.',
+    aiDescription1: 'Our AI agents take over complex tasks partially to completely. They understand context, make decisions, and adapt to your business processes.',
+    aiDescription2: 'Through intelligent integration, we can dive into various programs and work directly with AI there – from customer service via data analysis to automated workflows that work around the clock for you.',
+    aiCapabilities: 'Key Capabilities',
+    
+    // Problems & Solutions
+    problemsTitle: 'What holds you back from AI?',
+    problemsCategory: 'CUSTOMER CONCERNS',
+    solutionsTitle: 'We solve every concern.',
+    solutionsCategory: 'OUR SOLUTIONS',
+    
+    // Workflow Integration
+    workflowCategory: 'WORKFLOW INTEGRATION',
+    workflowTitle: 'How our services<br/>work together seamlessly.',
+    workflowDescription: 'Modern websites provide the foundation, intuitive interfaces engage your users, and AI automation streamlines your operations. Together they create powerful digital ecosystems that scale with your business growth.',
+    
+    // Calculator
+    calculatorCategory: 'Client Success Stories',
+    calculatorTitle: 'Real results from<br/>satisfied clients.',
+    
+    // Contact
+    contactCategory: 'Contact',
+    contactTitle: 'Ready to transform<br/>your business?',
+    contactDescription1: 'Contact our team to discover how we can optimize your processes.',
+    contactDescription2: 'Send us a message and we will get back to you within 24 hours.',
+    contactButton: 'Contact',
+    
+    // Buttons
+    sendMessage: 'Send Message'
+  }
+};
+
+let currentLanguage = 'de';
+
 function switchLanguage(lang) {
   const enBtn = document.getElementById('langEN');
   const deBtn = document.getElementById('langDE');
@@ -200,7 +327,124 @@ function switchLanguage(lang) {
     deBtn.style.borderColor = '#e0e0e0';
   }
   
+  currentLanguage = lang;
+  updatePageContent(lang);
   console.log('Language switched to:', lang);
+}
+
+function updatePageContent(lang) {
+  const t = translations[lang];
+  
+  // Navigation menu
+  document.querySelectorAll('.nav-item-title').forEach((el, i) => {
+    const keys = ['navStart', 'navWebsites', 'navInterfaces', 'navAI', 'navProblems', 'navWorkflow', 'navCalculator', 'navContact'];
+    if (keys[i] && t[keys[i]]) {
+      el.textContent = t[keys[i]];
+    }
+  });
+  
+  // Hero slide
+  const heroElements = document.querySelectorAll('.hero-main-text span');
+  if (heroElements.length >= 5) {
+    heroElements[0].textContent = t.heroWebsites;
+    heroElements[1].textContent = t.heroInterfaces;
+    heroElements[2].textContent = t.heroAI;
+    heroElements[3].textContent = t.heroFor;
+    heroElements[4].textContent = t.heroProcesses;
+  }
+  
+  // Services slide
+  const servicesCategory = document.querySelector('[data-slide="1"] .services-category');
+  if (servicesCategory) servicesCategory.textContent = t.servicesCategory;
+  
+  const servicesTitle = document.querySelector('[data-slide="1"] h2');
+  if (servicesTitle) servicesTitle.innerHTML = t.servicesTitle;
+  
+  const servicesDesc = document.querySelector('[data-slide="1"] p');
+  if (servicesDesc) servicesDesc.textContent = t.servicesDescription;
+  
+  const techLabel = document.querySelector('[data-slide="1"] .tech-label');
+  if (techLabel) techLabel.textContent = t.servicesTech;
+  
+  // Interface slide  
+  const interfaceCategory = document.querySelector('[data-slide="2"] .interface-category');
+  if (interfaceCategory) interfaceCategory.textContent = t.interfaceCategory;
+  
+  const interfaceTitle = document.querySelector('[data-slide="2"] h2');
+  if (interfaceTitle) interfaceTitle.innerHTML = t.interfaceTitle;
+  
+  const interfaceDesc = document.querySelector('[data-slide="2"] p');
+  if (interfaceDesc) interfaceDesc.textContent = t.interfaceDescription;
+  
+  // AI slide
+  const aiCategory = document.querySelector('[data-slide="3"] .ai-category');
+  if (aiCategory) aiCategory.textContent = t.aiCategory;
+  
+  const aiTitle = document.querySelector('[data-slide="3"] h2');
+  if (aiTitle) aiTitle.innerHTML = t.aiTitle;
+  
+  const aiDesc1 = document.querySelector('[data-slide="3"] p:first-of-type');
+  if (aiDesc1) aiDesc1.textContent = t.aiDescription1;
+  
+  const aiDesc2 = document.querySelector('[data-slide="3"] p:last-of-type');
+  if (aiDesc2) aiDesc2.textContent = t.aiDescription2;
+  
+  const aiCap = document.querySelector('[data-slide="3"] h4');
+  if (aiCap) aiCap.textContent = t.aiCapabilities;
+  
+  // Contact slide
+  const contactCategory = document.querySelector('[data-slide="7"] .contact-category');
+  if (contactCategory) contactCategory.textContent = t.contactCategory;
+  
+  const contactTitle = document.querySelector('[data-slide="7"] h2');
+  if (contactTitle) contactTitle.innerHTML = t.contactTitle;
+  
+  const contactDesc1 = document.querySelector('[data-slide="7"] p:first-of-type');
+  if (contactDesc1) contactDesc1.textContent = t.contactDescription1;
+  
+  const contactDesc2 = document.querySelector('[data-slide="7"] p:last-of-type');
+  if (contactDesc2) contactDesc2.textContent = t.contactDescription2;
+  
+  // Contact buttons
+  document.querySelectorAll('[onclick*="goToSlide(7)"]').forEach(btn => {
+    if (btn.textContent.includes('Kontakt') || btn.textContent.includes('Contact')) {
+      btn.textContent = t.contactButton;
+    }
+  });
+  
+  // Send message button
+  const sendBtn = document.querySelector('#contactFormMain button[type="submit"]');
+  if (sendBtn) sendBtn.textContent = t.sendMessage;
+  
+  // Problems & Solutions slide (Slide 4)
+  const problemsCategory = document.querySelector('[data-slide="4"] .problems-category');
+  if (problemsCategory) problemsCategory.textContent = t.problemsCategory;
+  
+  const problemsTitle = document.querySelector('[data-slide="4"] .problems-title');
+  if (problemsTitle) problemsTitle.innerHTML = t.problemsTitle;
+  
+  const solutionsCategory = document.querySelector('[data-slide="4"] .solutions-category');
+  if (solutionsCategory) solutionsCategory.textContent = t.solutionsCategory;
+  
+  const solutionsTitle = document.querySelector('[data-slide="4"] .solutions-title');
+  if (solutionsTitle) solutionsTitle.innerHTML = t.solutionsTitle;
+  
+  // Workflow Integration slide (Slide 5)
+  const workflowCategory = document.querySelector('[data-slide="5"] .workflow-category');
+  if (workflowCategory) workflowCategory.textContent = t.workflowCategory;
+  
+  const workflowTitle = document.querySelector('[data-slide="5"] .workflow-title');
+  if (workflowTitle) workflowTitle.innerHTML = t.workflowTitle;
+  
+  const workflowDesc = document.querySelector('[data-slide="5"] .workflow-description');
+  if (workflowDesc) workflowDesc.textContent = t.workflowDescription;
+  
+  // Calculator slide (Slide 6)
+  const calculatorCategory = document.querySelector('[data-slide="6"] .calculator-category');
+  if (calculatorCategory) calculatorCategory.textContent = t.calculatorCategory;
+  
+  const calculatorTitle = document.querySelector('[data-slide="6"] .calculator-title');
+  if (calculatorTitle) calculatorTitle.innerHTML = t.calculatorTitle;
 }
 
 /* ===== CALCULATOR ===== */
@@ -320,38 +564,8 @@ async function loadHeaderLogo() {
 
 /* ===== RELOCATO LOGO ===== */
 async function loadRelocatoLogo() {
-  try {
-    const response = await fetch('./relocato_logo.json');
-    const logoData = await response.json();
-    
-    if (logoData.file && logoData.file.name) {
-      const relocatoContainer = document.querySelector('.slide[data-slide="6"]');
-      if (relocatoContainer) {
-        const testimonials = relocatoContainer.querySelectorAll('[style*="background: white"]');
-        for (const testimonial of testimonials) {
-          if (testimonial.textContent.includes('Relocato')) {
-            const avatarCircle = testimonial.querySelector('[style*="background: linear-gradient(135deg, #bdc887, #d4e195)"]');
-            if (avatarCircle) {
-              avatarCircle.innerHTML = '';
-              const logoImg = document.createElement('img');
-              logoImg.src = `./a25b2224-0379-44f4-b9e4-93e865cc091e.png`;
-              logoImg.alt = 'Relocato Logo';
-              logoImg.style.cssText = `
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                border-radius: 12px;
-              `;
-              avatarCircle.appendChild(logoImg);
-            }
-            break;
-          }
-        }
-      }
-    }
-  } catch (error) {
-    console.log('Relocato logo could not be loaded:', error);
-  }
+  // Keep the green "R" instead of loading image
+  console.log('Keeping green R avatar for Relocato');
 }
 
 /* ===== LOADING ANIMATION ===== */
