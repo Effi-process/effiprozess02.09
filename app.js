@@ -25,6 +25,7 @@ function isDarkSlide(i) {
 }
 
 let transitioning = false;
+let leavingSlide = null;
 
 function goToSlide(nextIndex) {
   if (!slides.length) refreshSlides();
@@ -41,6 +42,7 @@ function goToSlide(nextIndex) {
   document.documentElement.style.setProperty('--dir', String(dir));
 
   transitioning = true;
+  leavingSlide = currentSlide; // Track leaving slide
 
   // Enter/Leave-Klassen setzen
   nextEl.classList.add('is-entering');       // Startposition vorbereiten
@@ -57,26 +59,40 @@ function goToSlide(nextIndex) {
   // Header-Theme - keine slides mehr als dark
   document.body.classList.remove('is-dark');
 
-  // ARIA for screen readers
+  // ARIA for screen readers - keep leaving slide accessible during transition
   slides.forEach((el, i) => {
-    el.setAttribute('aria-hidden', i === next ? 'false' : 'true');
+    const isVisible = (i === next) || (i === leavingSlide);
+    el.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
   });
 
-  // Nach Ende der Transition aufräumen
+  // Nach Ende der Transition aufräumen - mit Timeout fallback
+  const cleanup = () => {
+    if (prevEl.classList.contains('is-leaving')) {
+      prevEl.classList.remove('is-leaving');
+    }
+    leavingSlide = null;
+    transitioning = false;
+  };
+
   const onDone = (e) => {
     if (e.target !== prevEl) return;
     prevEl.removeEventListener('transitionend', onDone);
-    prevEl.classList.remove('is-leaving');
-    transitioning = false;
+    cleanup();
   };
+  
   prevEl.addEventListener('transitionend', onDone, { once: true });
+  
+  // Fallback timeout - ensure cleanup happens even if transitionend doesn't fire
+  setTimeout(cleanup, 600);
 
   currentSlide = next;
   
   // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite, Probleme-Seite, Solutions-Seite, Calculator-Seite und Contact-Seite
   const canvas = document.getElementById('dotAnimation');
   if (canvas) {
-    canvas.style.display = (currentSlide >= 2) ? 'none' : 'block';
+    const shouldShow = (currentSlide === 0 || currentSlide === 1); // Nur auf Hero und Services
+    canvas.style.display = shouldShow ? 'block' : 'none';
+    console.log(`Canvas display: ${shouldShow ? 'block' : 'none'} (slide: ${currentSlide})`);
   }
 
   // Header ist mit CSS immer sichtbar - keine JavaScript-Manipulation nötig
@@ -628,8 +644,31 @@ function completeLoading() {
 
 /* ===== LOAD LOGO ===== */
 async function loadHeaderLogo() {
-  // Logo is now hardcoded in HTML, skip loading
-  return;
+  try {
+    const response = await fetch('./ep_logo.json');
+    const logoData = await response.json();
+    
+    if (logoData.data_uri) {
+      const logoContainer = document.getElementById('headerLogoContainer');
+      if (logoContainer) {
+        const logoImg = document.createElement('img');
+        logoImg.src = logoData.data_uri;
+        logoImg.alt = logoData.alt || 'Effiprocess Logo';
+        logoImg.className = 'header-logo-image';
+        logoImg.style.width = '40px';
+        logoImg.style.height = '40px';
+        logoImg.style.objectFit = 'contain';
+        logoContainer.appendChild(logoImg);
+      }
+    }
+  } catch (error) {
+    console.log('Logo could not be loaded:', error);
+    // Fallback to text logo
+    const logoContainer = document.getElementById('headerLogoContainer');
+    if (logoContainer) {
+      logoContainer.innerHTML = '<div style="font-size: 1.4rem; font-weight: 700; color: #333; font-family: Arial, sans-serif; letter-spacing: -1px;"><span style="display: inline-block; transform: scaleX(-1);">E</span><span style="color: #a078c8;">P</span></div>';
+    }
+  }
 }
 
 /* ===== LOAD AI ICON ===== */
@@ -694,12 +733,12 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     refreshSlides(); // Refresh slides array
     
-    // Startzustand: nur Slide 0 aktiv, keine Inline-Styles nötig
+    // Startzustand: nur Slide 0 aktiv, alle anderen bereit aber unsichtbar
     slides.forEach((el, i) => {
       // Clean slate - remove old classes and inline styles
       el.classList.remove('is-entering', 'is-leaving', 'is-active', 'active');
-      el.style.display = '';
-      el.style.visibility = '';
+      el.style.display = 'block';
+      el.style.visibility = 'visible';
       el.style.opacity = '';
       el.style.transform = '';
       el.style.filter = '';
@@ -714,6 +753,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // ARIA setup
       el.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
+      
+      // Debug output
+      console.log(`Slide ${i} (${el.dataset.slide}): initialized`);
     });
     
     console.log('Slides initialized:', slides.length);
@@ -733,6 +775,13 @@ document.addEventListener('DOMContentLoaded', () => {
   goToSlide(0);
   updateCarouselArrows();
   updateProblemsArrows();
+  
+  // Ensure canvas is visible on start
+  const canvas = document.getElementById('dotAnimation');
+  if (canvas) {
+    canvas.style.display = 'block';
+    console.log('Canvas forced visible on initialization');
+  }
 
   // Initialize bubble animation with error handling
   try {
@@ -742,7 +791,12 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn('Bubble animation failed to initialize:', error);
   }
   
-  // Skip logo loading - using hardcoded HTML logo
+  // Load the header logo
+  try {
+    loadHeaderLogo();
+  } catch (error) {
+    console.warn('Logo loading failed:', error);
+  }
   
   // Load the AI icon for slide 3
   try {
@@ -798,10 +852,33 @@ function updateActiveMenuItem() {
       const slideNum = parseInt(slideMatch[1]);
       if (slideNum === currentSlide) {
         item.classList.add('active');
+        
+        // Auto-expand Services group if active slide is a service (1-3)
+        if (slideNum >= 1 && slideNum <= 3) {
+          const servicesGroup = document.querySelector('.nav-group-title');
+          const servicesSubItems = document.getElementById('servicesSubItems');
+          if (servicesGroup && servicesSubItems) {
+            servicesGroup.classList.add('expanded');
+            servicesSubItems.classList.add('expanded');
+          }
+        }
       }
     }
   });
 }
+
+function toggleServicesGroup() {
+  const servicesGroup = document.querySelector('.nav-group-title');
+  const servicesSubItems = document.getElementById('servicesSubItems');
+  
+  if (servicesGroup && servicesSubItems) {
+    servicesGroup.classList.toggle('expanded');
+    servicesSubItems.classList.toggle('expanded');
+  }
+}
+
+// Make sure the function is globally available
+window.toggleServicesGroup = toggleServicesGroup;
 
 // Calculator function for time savings
 function calculateSavings() {
