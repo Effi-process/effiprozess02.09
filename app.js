@@ -79,13 +79,7 @@ function goToSlide(nextIndex) {
     canvas.style.display = (currentSlide >= 2) ? 'none' : 'block';
   }
 
-  // Hide header on slide 4 (solutions page), show on all others  
-  const header = document.querySelector('.header');
-  if (currentSlide === 4) { // Slide 4 (problems/solutions) only
-    header.style.display = 'none';
-  } else {
-    header.style.display = 'block';
-  }
+  // Header ist mit CSS immer sichtbar - keine JavaScript-Manipulation nötig
 
   // Hide all select dropdowns when changing slides
   const selectElements = document.querySelectorAll('select');
@@ -102,6 +96,11 @@ function goToSlide(nextIndex) {
   });
 
   updateVerticalArrows();
+  
+  // Update active menu item
+  if (typeof updateActiveMenuItem === 'function') {
+    updateActiveMenuItem();
+  }
 }
 
 function updateVerticalArrows() {
@@ -136,42 +135,32 @@ function bindVerticalArrows(){
     }
   });
 
-  // Robust scroll-to-slide navigation system - ONE slide per scroll gesture
+  // Strict scroll-to-slide navigation - EXACTLY ONE slide per scroll gesture
   let isScrolling = false;
-  let lastScrollTime = 0;
-  const SCROLL_COOLDOWN = 1000; // Time between allowed navigations
-  const SCROLL_DEBOUNCE = 50;   // Group rapid scroll events together
+  let scrollTimeout = null;
+  const SCROLL_COOLDOWN = 1200; // 1.2 Sekunden Wartezeit zwischen Scroll-Aktionen
   
   window.addEventListener('wheel', (e) => {
     e.preventDefault();
     
-    // Block all scrolling while in cooldown
+    // Komplett blockieren während Cooldown
     if (isScrolling) return;
     
-    const now = Date.now();
-    
-    // Group rapid scroll events together (debounce)
-    if (now - lastScrollTime < SCROLL_DEBOUNCE) return;
-    
-    // Set scrolling state immediately to prevent multiple triggers
+    // Sofort blockieren für weitere Scroll-Events
     isScrolling = true;
-    lastScrollTime = now;
     
-    // Determine direction and navigate exactly like arrow keys
-    if (e.deltaY > 0) {
-      // Scrolling down - go to next slide
-      if (currentSlide < slides.length - 1) {
-        goToSlide(currentSlide + 1);
-      }
-    } else if (e.deltaY < 0) {
-      // Scrolling up - go to previous slide  
-      if (currentSlide > 0) {
-        goToSlide(currentSlide - 1);
-      }
+    // Bestimme Richtung und navigiere nur EINEN Slide
+    if (e.deltaY > 0 && currentSlide < slides.length - 1) {
+      // Runter scrollen - nächste Seite
+      goToSlide(currentSlide + 1);
+    } else if (e.deltaY < 0 && currentSlide > 0) {
+      // Hoch scrollen - vorherige Seite
+      goToSlide(currentSlide - 1);
     }
     
-    // Reset scrolling state after cooldown
-    setTimeout(() => {
+    // Reset nach längerer Wartezeit
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
       isScrolling = false;
     }, SCROLL_COOLDOWN);
   }, { passive: false });
@@ -373,7 +362,7 @@ class OrganicBubbleAnimation {
     const baseRadius = Math.min(this.canvas.width, this.canvas.height) * 0.55;
 
     this.dots = [];
-    const numPoints = 2200; /* deutlich smoother & stabiler */
+    const numPoints = 1800; // Weniger Punkte für bessere Performance mit verschiedenen Größen
 
     for (let i = 0; i < numPoints; i++) {
       const phi = Math.acos(1 - 2 * i / numPoints);
@@ -390,14 +379,55 @@ class OrganicBubbleAnimation {
       if (distanceFromCenter < 160) continue;
 
       const maxDistance = baseRadius * 1.2;
-      const size = 1 + (distanceFromCenter / maxDistance) * 2;
-      const opacity = Math.min(0.9, Math.max(0, (distanceFromCenter - 120) / maxDistance) * 2);
+      
+      // Verschiedene Punktgrößen basierend auf zufälliger Verteilung
+      const sizeVariation = Math.random();
+      let size, sizeCategory;
+      
+      if (sizeVariation < 0.6) {
+        // 60% kleine Punkte (1-3px)
+        size = 1 + Math.random() * 2;
+        sizeCategory = 'small';
+      } else if (sizeVariation < 0.85) {
+        // 25% mittlere Punkte (3-8px)
+        size = 3 + Math.random() * 5;
+        sizeCategory = 'medium';
+      } else if (sizeVariation < 0.96) {
+        // 11% große Punkte (8-15px)
+        size = 8 + Math.random() * 7;
+        sizeCategory = 'large';
+      } else {
+        // 4% extra große Punkte (15-25px)
+        size = 15 + Math.random() * 10;
+        sizeCategory = 'xlarge';
+      }
+      
+      // Verschiedene Lila-Schattierungen basierend auf Größe
+      let color;
+      switch(sizeCategory) {
+        case 'small':
+          color = { r: 180, g: 140, b: 220 }; // Helles Lila
+          break;
+        case 'medium':
+          color = { r: 160, g: 120, b: 200 }; // Standard Lila
+          break;
+        case 'large':
+          color = { r: 140, g: 100, b: 180 }; // Dunkleres Lila
+          break;
+        case 'xlarge':
+          color = { r: 120, g: 80, b: 160 };  // Sehr dunkles Lila
+          break;
+      }
+
+      const opacity = Math.min(0.8, Math.max(0.1, (distanceFromCenter - 120) / maxDistance) * 1.5);
 
       this.dots.push({
         x, y, targetX: x, targetY: y,
         phi, theta, baseRadius: radius,
         size, targetSize: size, opacity,
-        targetOpacity: opacity
+        targetOpacity: opacity,
+        color: color,
+        sizeCategory: sizeCategory
       });
     }
   }
@@ -530,7 +560,9 @@ class OrganicBubbleAnimation {
           }
 
           if (dot.opacity > 0.01 && this.ctx) {
-            this.ctx.fillStyle = `rgba(${this.COLOR.r}, ${this.COLOR.g}, ${this.COLOR.b}, ${dot.opacity})`;
+            // Verwende die spezifische Farbe des Punktes oder fallback zur Standard-Farbe
+            const color = dot.color || this.COLOR;
+            this.ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${dot.opacity})`;
             this.ctx.beginPath();
             this.ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
             this.ctx.fill();
@@ -596,27 +628,8 @@ function completeLoading() {
 
 /* ===== LOAD LOGO ===== */
 async function loadHeaderLogo() {
-  try {
-    const response = await fetch('./ep_logo.json');
-    const logoData = await response.json();
-    
-    if (logoData.data_uri) {
-      const logoContainer = document.getElementById('headerLogoContainer');
-      if (logoContainer) {
-        const logoImg = document.createElement('img');
-        logoImg.src = logoData.data_uri;
-        logoImg.alt = 'Effiprocess Logo';
-        logoImg.className = 'header-logo-image';
-        logoImg.width = 56;
-        logoImg.height = 56;
-        logoImg.style.width = '56px';
-        logoImg.style.height = '56px';
-        logoContainer.appendChild(logoImg);
-      }
-    }
-  } catch (error) {
-    console.log('Logo could not be loaded:', error);
-  }
+  // Logo is now hardcoded in HTML, skip loading
+  return;
 }
 
 /* ===== LOAD AI ICON ===== */
@@ -729,12 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn('Bubble animation failed to initialize:', error);
   }
   
-  // Load the header logo
-  try {
-    loadHeaderLogo();
-  } catch (error) {
-    console.warn('Logo loading failed:', error);
-  }
+  // Skip logo loading - using hardcoded HTML logo
   
   // Load the AI icon for slide 3
   try {
@@ -742,11 +750,57 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch (error) {
     console.warn('AI icon loading failed:', error);
   }
+  
+  // Initialize navigation menu
+  setTimeout(() => {
+    initializeNavMenu();
+  }, 200);
 });
 
 // Utility function for header click
 function goToHome() {
   goToSlide(0);
+}
+
+/* ===== NAVIGATION MENU ===== */
+function initializeNavMenu() {
+  const menuToggle = document.getElementById('navMenuToggle');
+  const menuDropdown = document.getElementById('navMenuDropdown');
+  
+  if (!menuToggle || !menuDropdown) return;
+  
+  // Toggle menu on button click
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menuDropdown.classList.toggle('active');
+  });
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.header-nav-menu')) {
+      menuDropdown.classList.remove('active');
+    }
+  });
+  
+  // Update active menu item when slide changes
+  updateActiveMenuItem();
+}
+
+function updateActiveMenuItem() {
+  const menuItems = document.querySelectorAll('.nav-menu-item[onclick]');
+  menuItems.forEach(item => {
+    item.classList.remove('active');
+    
+    // Extract slide number from onclick attribute
+    const onclick = item.getAttribute('onclick');
+    const slideMatch = onclick.match(/goToSlide\((\d+)\)/);
+    if (slideMatch) {
+      const slideNum = parseInt(slideMatch[1]);
+      if (slideNum === currentSlide) {
+        item.classList.add('active');
+      }
+    }
+  });
 }
 
 // Calculator function for time savings
