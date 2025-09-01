@@ -1,0 +1,42 @@
+{
+  "type": "logo",
+  "title": "Relocato logo",
+  "file": {
+    "name": "a25b2224-0379-44f4-b9e4-93e865cc091e.png",
+    "mime": "image/png",
+    "size_bytes": 16226,
+    "width": 384,
+    "height": 350,
+    "has_alpha": false
+  },
+  "visual_summary": {
+    "shapes": ["open moving box icon"],
+    "primary_text": "RELOCATO",
+    "colors": [
+      {
+        "hex": "#ffffff",
+        "rgb": { "r": 255, "g": 255, "b": 255 },
+        "percentage": 77.6
+      },
+      {
+        "hex": "#bdc887",
+        "rgb": { "r": 189, "g": 200, "b": 135 },
+        "percentage": 13.05
+      },
+      {
+        "hex": "#737c51",
+        "rgb": { "r": 115, "g": 124, "b": 81 },
+        "percentage": 7.9
+      },
+      {
+        "hex": "#d4e195",
+        "rgb": { "r": 212, "g": 225, "b": 149 },
+        "percentage": 1.45
+      }
+    ],
+    "average_color": {
+      "hex": "#d1d1c7",
+      "rgb": { "r": 209, "g": 209, "b": 199 }
+    }
+  }
+}

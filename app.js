@@ -704,6 +704,12 @@ async function loadAIIcon() {
   }
 }
 
+/* ===== LOAD RELOCATO LOGO (DISABLED) ===== */
+async function loadRelocatoLogo() {
+  // Disabled - use standard "R" avatar instead
+  console.log('Relocato logo loading disabled - using standard avatar');
+}
+
 /* ===== INITIALIZATION ===== */
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM Content Loaded');
@@ -803,6 +809,13 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAIIcon();
   } catch (error) {
     console.warn('AI icon loading failed:', error);
+  }
+  
+  // Load the Relocato logo for testimonial
+  try {
+    loadRelocatoLogo();
+  } catch (error) {
+    console.warn('Relocato logo loading failed:', error);
   }
   
   // Initialize navigation menu
