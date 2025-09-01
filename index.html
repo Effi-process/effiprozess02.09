@@ -75,6 +75,10 @@
         </div>
         <div class="nav-menu-item" onclick="goToSlide(6)">
           <span class="nav-item-number">07</span>
+          <span class="nav-item-title">Calculator</span>
+        </div>
+        <div class="nav-menu-item" onclick="goToSlide(7)">
+          <span class="nav-item-number">08</span>
           <span class="nav-item-title">Contact</span>
         </div>
       </div>
@@ -159,15 +163,18 @@
             
             <!-- Right side: Clean visual area -->
             <div class="services-visual-section">
-              <!-- Page number -->
-              <div class="page-number">01/07</div>
             </div>
             
           </div>
         </div>
         
+        <!-- Page number bottom left -->
+        <div style="position: absolute; bottom: 30px; left: 30px; z-index: 100;">
+          <div style="font-size: 1.2rem; font-weight: 500; color: #a078c8; font-family: 'SF Mono', Monaco, monospace;">01/07</div>
+        </div>
+        
         <!-- Subtle Contact Button -->
-        <div onclick="goToSlide(6)" style="position: absolute; bottom: 80px; right: 30px; padding: 8px 16px; background: rgba(160, 120, 200, 0.08); border: 1px solid rgba(160, 120, 200, 0.2); border-radius: 20px; color: #a078c8; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px); z-index: 100;" onmouseover="this.style.background='rgba(160, 120, 200, 0.15)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(160, 120, 200, 0.08)'; this.style.transform='translateY(0)'">
+        <div onclick="goToSlide(7)" style="position: absolute; bottom: 30px; right: 30px; padding: 8px 16px; background: rgba(160, 120, 200, 0.08); border: 1px solid rgba(160, 120, 200, 0.2); border-radius: 20px; color: #a078c8; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px); z-index: 100;" onmouseover="this.style.background='rgba(160, 120, 200, 0.15)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(160, 120, 200, 0.08)'; this.style.transform='translateY(0)'">
           Contact Us
         </div>
         
@@ -209,7 +216,8 @@
       
       <!-- Left side: Large number -->
       <div style="position: absolute; left: 0; top: 0; width: 180px; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10;">
-        <div style="font-size: 5rem; font-weight: 300; color: #a078c8; transform: rotate(-90deg); white-space: nowrap; font-family: 'SF Mono', Monaco, monospace;">02/07</div>
+        <!-- Page number bottom left -->
+        <div style="position: absolute; bottom: 30px; left: 30px; font-size: 1.2rem; font-weight: 500; color: #666; font-family: 'SF Mono', Monaco, monospace; transform: none;">02/07</div>
       </div>
       
       <!-- Subtle Contact Button -->
@@ -292,7 +300,7 @@
       
       <!-- Page Number bottom left -->
       <div style="position: absolute; bottom: 30px; left: 30px; z-index: 10;">
-        <div style="font-size: 2rem; font-weight: 300; color: #a078c8; font-family: 'SF Mono', Monaco, monospace; opacity: 0.7;">03/07</div>
+        <div style="font-size: 1.2rem; font-weight: 500; color: #a078c8; font-family: 'SF Mono', Monaco, monospace;">03/07</div>
       </div>
       
       <!-- AI Icon positioned on the left side -->
@@ -438,13 +446,13 @@
       </div>
       
       
-      <!-- Page Number -->
-      <div style="position: absolute; bottom: 40px; left: 50vw; transform: translateX(-50%); z-index: 5;">
-        <div style="font-size: 2rem; font-weight: 300; color: #a078c8; font-family: 'SF Mono', Monaco, monospace; opacity: 0.7;">04/07</div>
+      <!-- Page Number bottom left -->
+      <div style="position: absolute; bottom: 30px; left: 30px; z-index: 1005;">
+        <div style="font-size: 1.2rem; font-weight: 500; color: #666; font-family: 'SF Mono', Monaco, monospace;">04/07</div>
       </div>
       
       <!-- Subtle Contact Button -->
-      <div onclick="goToSlide(6)" style="position: absolute; bottom: 30px; right: 30px; padding: 8px 16px; background: rgba(160, 120, 200, 0.08); border: 1px solid rgba(160, 120, 200, 0.2); border-radius: 20px; color: #a078c8; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px); z-index: 5;" onmouseover="this.style.background='rgba(160, 120, 200, 0.15)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(160, 120, 200, 0.08)'; this.style.transform='translateY(0)'">
+      <div onclick="goToSlide(7)" style="position: absolute; bottom: 30px; right: 30px; padding: 8px 16px; background: rgba(160, 120, 200, 0.08); border: 1px solid rgba(160, 120, 200, 0.2); border-radius: 20px; color: #a078c8; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px); z-index: 1005;" onmouseover="this.style.background='rgba(160, 120, 200, 0.15)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(160, 120, 200, 0.08)'; this.style.transform='translateY(0)'">
         Contact Us
       </div>
       
@@ -455,7 +463,8 @@
       
       <!-- Left vertical text -->
       <div style="position: absolute; left: 0; top: 0; width: 180px; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10;">
-        <div style="font-size: 5rem; font-weight: 300; color: #a078c8; transform: rotate(-90deg); white-space: nowrap; font-family: 'SF Mono', Monaco, monospace;">05/07</div>
+        <!-- Page number bottom left -->
+        <div style="position: absolute; bottom: 30px; left: 30px; font-size: 1.2rem; font-weight: 500; color: #a078c8; font-family: 'SF Mono', Monaco, monospace; transform: none;">05/07</div>
       </div>
       
       <!-- Main content area -->
@@ -545,50 +554,70 @@
 
     <!-- SLIDE 6: CALCULATOR -->
     <section class="slide calculator" data-slide="6" style="background: #f8f9fa !important; z-index: 1;">
-      <!-- Vertical 06/07 in center background -->
-      <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-90deg); z-index: 1;">
-        <div style="font-size: 3rem; font-weight: 300; color: #333; font-family: 'SF Mono', Monaco, monospace; opacity: 0.3; white-space: nowrap;">07/07</div>
+      <!-- Page number bottom left -->
+      <div style="position: absolute; bottom: 30px; left: 30px; z-index: 100;">
+        <div style="font-size: 1.2rem; font-weight: 500; color: #666; font-family: 'SF Mono', Monaco, monospace;">06/07</div>
       </div>
       
-      <!-- Left content area -->
+      <!-- Left content area - Client Testimonials -->
       <div style="position: absolute; left: 180px; top: 0; width: 35%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 30px; z-index: 10;">
         <div style="max-width: 350px;">
-          <div style="font-size: 0.9rem; color: #a078c8; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 25px;">Time Savings Calculator</div>
-          <h2 style="font-size: 2.4rem; font-weight: 300; color: #333333; line-height: 1.15; margin-bottom: 25px; letter-spacing: -0.02em;">
-            Calculate your<br/>
-            automation ROI.
+          <div style="font-size: 0.9rem; color: #a078c8; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 25px;">Client Success Stories</div>
+          <h2 style="font-size: 2.4rem; font-weight: 300; color: #333333; line-height: 1.15; margin-bottom: 35px; letter-spacing: -0.02em;">
+            Real results from<br/>
+            satisfied clients.
           </h2>
           
-          <div style="font-size: 0.85rem; color: #666666; line-height: 1.6; margin-bottom: 30px; max-width: 380px;">
-            <p style="margin-bottom: 15px;">
-              Estimate time and cost savings with our intelligent automation solutions. Our advanced algorithms analyze your workflow patterns to provide accurate ROI calculations.
-            </p>
-            <p style="margin-bottom: 15px;">
-              Transform repetitive tasks into automated processes that work 24/7. See how much time and money your business can save by implementing our tailored automation strategies.
-            </p>
-            <p>
-              Enter your current workflow details in the calculator to discover your potential savings. Every minute automated is a minute gained for strategic business growth.
-            </p>
+          <!-- Relocato Testimonial -->
+          <div style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 2px solid rgba(189, 200, 135, 0.2); box-shadow: 0 4px 20px rgba(189, 200, 135, 0.1);">
+            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+              <div style="width: 35px; height: 35px; background: linear-gradient(135deg, #bdc887, #d4e195); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                <span style="font-size: 1rem; font-weight: 700; color: #737c51;">R</span>
+              </div>
+              <div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #333; margin-bottom: 1px;">Relocato</div>
+                <div style="font-size: 0.65rem; color: #737c51; text-transform: uppercase; letter-spacing: 0.05em;">Moving Services</div>
+              </div>
+            </div>
+            <div style="font-size: 0.8rem; color: #555; line-height: 1.4; font-style: italic;">
+              "Automated our inquiry and quote process. Response time reduced from 24 hours to under 2 minutes while maintaining personal service quality."
+            </div>
+          </div>
+          
+          <!-- Rückbaupro Testimonial -->
+          <div style="background: white; border-radius: 12px; padding: 20px; border: 2px solid rgba(160, 120, 200, 0.2); box-shadow: 0 4px 20px rgba(160, 120, 200, 0.1);">
+            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+              <div style="width: 35px; height: 35px; background: linear-gradient(135deg, #a078c8, #b088d8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                <span style="font-size: 1rem; font-weight: 700; color: white;">R</span>
+              </div>
+              <div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #333; margin-bottom: 1px;">Rückbaupro</div>
+                <div style="font-size: 0.65rem; color: #a078c8; text-transform: uppercase; letter-spacing: 0.05em;">Construction</div>
+              </div>
+            </div>
+            <div style="font-size: 0.8rem; color: #555; line-height: 1.4; font-style: italic;">
+              "Our new website perfectly represents our demolition expertise. The modern design increased client inquiries and project bookings significantly."
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Right side: Calculator -->
-      <div style="position: absolute; right: -100px; top: 50%; transform: translateY(-50%); width: 42%; z-index: 10;">
-        <div style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 20px; padding: 35px; box-shadow: 0 25px 80px rgba(160, 120, 200, 0.15), 0 0 0 1px rgba(160, 120, 200, 0.1); border: 2px solid rgba(160, 120, 200, 0.2); width: 100%; max-width: 420px;">
+      <div style="position: absolute; right: 80px; top: 50%; transform: translateY(-50%); width: 38%; z-index: 10;">
+        <div style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 16px; padding: 25px; box-shadow: 0 20px 60px rgba(160, 120, 200, 0.12), 0 0 0 1px rgba(160, 120, 200, 0.1); border: 2px solid rgba(160, 120, 200, 0.2); width: 100%; max-width: 380px;">
           
           <!-- Calculator Header -->
-          <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid rgba(160, 120, 200, 0.1);">
-            <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-              <div style="width: 12px; height: 12px; background: #a078c8; border-radius: 50%; box-shadow: 0 0 10px rgba(160, 120, 200, 0.4);"></div>
-              <h3 style="color: #a078c8; font-size: 1.2rem; font-weight: 600; margin: 0;">ROI Calculator</h3>
-              <div style="width: 12px; height: 12px; background: #a078c8; border-radius: 50%; box-shadow: 0 0 10px rgba(160, 120, 200, 0.4);"></div>
+          <div style="text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid rgba(160, 120, 200, 0.1);">
+            <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <div style="width: 8px; height: 8px; background: #a078c8; border-radius: 50%;"></div>
+              <h3 style="color: #a078c8; font-size: 1rem; font-weight: 600; margin: 0;">ROI Calculator</h3>
+              <div style="width: 8px; height: 8px; background: #a078c8; border-radius: 50%;"></div>
             </div>
-            <div style="font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.1em;">Automation Impact Analysis</div>
+            <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 0.1em;">Automation Impact</div>
           </div>
           
           <!-- Calculator Fields -->
-          <div style="margin-bottom: 20px;">
+          <div style="margin-bottom: 15px;">
             <label style="display: block; font-size: 0.8rem; color: #666; margin-bottom: 10px; font-weight: 600;">Daily Tasks</label>
             <select id="tasksPerDay" onchange="calculateSavings()" style="width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 0.9rem; background: white; color: #333; font-weight: 500; cursor: pointer; transition: border-color 0.2s ease;">
               <option value="" disabled selected>Please select</option>
@@ -669,15 +698,123 @@
               <span id="costSaved" style="font-size: 1.2rem; font-weight: 700; color: #a078c8;">--</span>
             </div>
           </div>
+          
+          <!-- Contact Section Below Calculator -->
+          <div style="margin-top: 30px; padding-top: 25px; border-top: 2px solid rgba(160, 120, 200, 0.1);">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <h4 style="color: #a078c8; font-size: 1rem; font-weight: 600; margin-bottom: 6px;">Get in Touch</h4>
+              <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 0.1em;">Start Your Digital Journey</div>
+            </div>
+            
+            <!-- Compact Contact Form -->
+            <form id="contactForm" style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <input type="text" id="contactName" required style="padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 0.8rem; background: white; color: #333;" placeholder="Your Name">
+                <input type="email" id="contactEmail" required style="padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 0.8rem; background: white; color: #333;" placeholder="Email">
+              </div>
+              <textarea id="contactMessage" required rows="2" style="padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 0.8rem; background: white; color: #333; resize: vertical;" placeholder="Tell us about your project..."></textarea>
+              <button type="submit" style="padding: 10px; background: linear-gradient(135deg, #a078c8, #b088d8); color: white; border: none; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                Send Message
+              </button>
+            </form>
+            
+            <!-- Form Status -->
+            <div id="formStatus" style="margin-top: 8px; padding: 6px; border-radius: 4px; text-align: center; font-size: 0.7rem; font-weight: 500; display: none;"></div>
+          </div>
         </div>
       </div>
       
       <!-- Subtle Contact Button -->
-      <div onclick="goToSlide(6)" style="position: absolute; bottom: 30px; right: 30px; padding: 8px 16px; background: rgba(160, 120, 200, 0.08); border: 1px solid rgba(160, 120, 200, 0.2); border-radius: 20px; color: #a078c8; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px); z-index: 100;" onmouseover="this.style.background='rgba(160, 120, 200, 0.15)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(160, 120, 200, 0.08)'; this.style.transform='translateY(0)'">
+      <div onclick="goToSlide(7)" style="position: absolute; bottom: 30px; right: 30px; padding: 8px 16px; background: rgba(160, 120, 200, 0.08); border: 1px solid rgba(160, 120, 200, 0.2); border-radius: 20px; color: #a078c8; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px); z-index: 100;" onmouseover="this.style.background='rgba(160, 120, 200, 0.15)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(160, 120, 200, 0.08)'; this.style.transform='translateY(0)'">
         Contact Us
       </div>
     </section>
 
+    <!-- SLIDE 7: CONTACT -->
+    <section class="slide contact" data-slide="7" style="background: #ffffff !important; z-index: 1;">
+      <!-- Page number bottom left -->
+      <div style="position: absolute; bottom: 30px; left: 30px; z-index: 100;">
+        <div style="font-size: 1.2rem; font-weight: 500; color: #666; font-family: 'SF Mono', Monaco, monospace;">07/07</div>
+      </div>
+      
+      <!-- Left content area -->
+      <div style="position: absolute; left: 180px; top: 0; width: 35%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 30px; z-index: 10;">
+        <div style="max-width: 350px;">
+          <div style="font-size: 0.9rem; color: #a078c8; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 25px;">Contact Us</div>
+          <h2 style="font-size: 2.4rem; font-weight: 300; color: #333333; line-height: 1.15; margin-bottom: 25px; letter-spacing: -0.02em;">
+            Ready to transform<br/>
+            your business?
+          </h2>
+          
+          <div style="font-size: 0.85rem; color: #666666; line-height: 1.6; margin-bottom: 30px; max-width: 380px;">
+            <p style="margin-bottom: 15px;">
+              Get in touch with our team to discover how we can streamline your processes.
+            </p>
+            <p>
+              Send us a message and we'll get back to you within 24 hours.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right side: Contact Form -->
+      <div style="position: absolute; right: -50px; top: 50%; transform: translateY(-50%); width: 42%; z-index: 10;">
+        <div style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 20px; padding: 35px; box-shadow: 0 25px 80px rgba(160, 120, 200, 0.15), 0 0 0 1px rgba(160, 120, 200, 0.1); border: 2px solid rgba(160, 120, 200, 0.2); width: 100%; max-width: 420px;">
+          
+          <!-- Contact Form Header -->
+          <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid rgba(160, 120, 200, 0.1);">
+            <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <div style="width: 12px; height: 12px; background: #a078c8; border-radius: 50%; box-shadow: 0 0 10px rgba(160, 120, 200, 0.4);"></div>
+              <h3 style="color: #a078c8; font-size: 1.2rem; font-weight: 600; margin: 0;">Get in Touch</h3>
+              <div style="width: 12px; height: 12px; background: #a078c8; border-radius: 50%; box-shadow: 0 0 10px rgba(160, 120, 200, 0.4);"></div>
+            </div>
+            <div style="font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.1em;">Let's Start Your Digital Journey</div>
+          </div>
+          
+          <!-- Contact Form -->
+          <form id="contactFormMain" style="display: flex; flex-direction: column; gap: 20px;">
+            <div>
+              <label style="display: block; font-size: 0.8rem; color: #666; margin-bottom: 10px; font-weight: 600;">Name *</label>
+              <input type="text" id="contactNameMain" required style="width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 0.9rem; background: white; color: #333; font-weight: 400; transition: border-color 0.2s ease;" placeholder="Your full name">
+            </div>
+            
+            <div>
+              <label style="display: block; font-size: 0.8rem; color: #666; margin-bottom: 10px; font-weight: 600;">Email *</label>
+              <input type="email" id="contactEmailMain" required style="width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 0.9rem; background: white; color: #333; font-weight: 400; transition: border-color 0.2s ease;" placeholder="your.email@company.com">
+            </div>
+            
+            <div>
+              <label style="display: block; font-size: 0.8rem; color: #666; margin-bottom: 10px; font-weight: 600;">Company</label>
+              <input type="text" id="contactCompanyMain" style="width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 0.9rem; background: white; color: #333; font-weight: 400; transition: border-color 0.2s ease;" placeholder="Your company name">
+            </div>
+            
+            <div>
+              <label style="display: block; font-size: 0.8rem; color: #666; margin-bottom: 10px; font-weight: 600;">Service Interest</label>
+              <select id="contactServiceMain" style="width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 0.9rem; background: white; color: #333; font-weight: 500; cursor: pointer; transition: border-color 0.2s ease;">
+                <option value="">Select a service</option>
+                <option value="websites">Modern Websites</option>
+                <option value="interfaces">User Interfaces</option>
+                <option value="ai-automation">AI Automation</option>
+                <option value="consultation">Consultation</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            
+            <div>
+              <label style="display: block; font-size: 0.8rem; color: #666; margin-bottom: 10px; font-weight: 600;">Message *</label>
+              <textarea id="contactMessageMain" required rows="4" style="width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 0.9rem; background: white; color: #333; font-weight: 400; transition: border-color 0.2s ease; resize: vertical; min-height: 100px;" placeholder="Tell us about your project and how we can help you..."></textarea>
+            </div>
+            
+            <button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #a078c8, #b088d8); color: white; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 10px;">
+              Send Message
+            </button>
+          </form>
+          
+          <!-- Form Status -->
+          <div id="formStatusMain" style="margin-top: 15px; padding: 12px; border-radius: 8px; text-align: center; font-size: 0.8rem; font-weight: 500; display: none;"></div>
+        </div>
+      </div>
+    </section>
 
   </main>
 </body>
