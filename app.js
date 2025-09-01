@@ -87,10 +87,10 @@ function goToSlide(nextIndex) {
 
   currentSlide = next;
   
-  // Canvas komplett verstecken auf Interface-Seite, AI Agent Seite, Probleme-Seite, Solutions-Seite, Calculator-Seite und Contact-Seite
+  // Canvas nur auf Hero-Seite (Slide 0) anzeigen
   const canvas = document.getElementById('dotAnimation');
   if (canvas) {
-    const shouldShow = (currentSlide === 0 || currentSlide === 1); // Nur auf Hero und Services
+    const shouldShow = (currentSlide === 0); // Nur auf Hero-Slide
     canvas.style.display = shouldShow ? 'block' : 'none';
     console.log(`Canvas display: ${shouldShow ? 'block' : 'none'} (slide: ${currentSlide})`);
   }
@@ -498,7 +498,7 @@ class OrganicBubbleAnimation {
   }
 
   updateBubbleBreathing() {
-    if (currentSlide !== idx.hero) return;
+    if (currentSlide !== 0) return; // Direkt Slide 0 prüfen statt idx.hero
 
     const t = this.time * 0.0002;
     const centerX = this.canvas.width / 2;
@@ -547,7 +547,7 @@ class OrganicBubbleAnimation {
     try {
       this.time += 16;
 
-      if (currentSlide === idx.hero) {
+      if (currentSlide === 0) { // Direkt Slide 0 prüfen
         this.updateBubbleBreathing();
       } else {
         // Alle anderen Seiten: Animation komplett ausblenden
@@ -561,15 +561,15 @@ class OrganicBubbleAnimation {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       }
 
-      // Nur animieren und zeichnen wenn auf Hero Seite
-      if (currentSlide === idx.hero) {
+      // Nur animieren und zeichnen wenn auf Hero Seite (Slide 0)
+      if (currentSlide === 0) {
         for (const dot of this.dots) {
           dot.x += (dot.targetX - dot.x) * 0.08;
           dot.y += (dot.targetY - dot.y) * 0.08;
           dot.size += (dot.targetSize - dot.size) * 0.12;
           dot.opacity += (dot.targetOpacity - dot.opacity) * 0.06;
 
-          if (currentSlide === idx.hero) {
+          if (currentSlide === 0) { // Direkt Slide 0 prüfen
             const jitter = 0.15;
             dot.x += (Math.random() - 0.5) * jitter;
             dot.y += (Math.random() - 0.5) * jitter;

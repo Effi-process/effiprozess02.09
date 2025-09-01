@@ -121,6 +121,7 @@ body {
   pointer-events: none;
   z-index: 0; /* HINTER die Slides! */
   background: transparent; /* explizit transparent */
+  display: block !important; /* Always visible when not hidden by JS */
 }
 
 /* Fixed Header */
