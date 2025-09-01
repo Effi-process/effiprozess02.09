@@ -880,6 +880,37 @@ function toggleServicesGroup() {
 // Make sure the function is globally available
 window.toggleServicesGroup = toggleServicesGroup;
 
+/* ===== LANGUAGE SWITCHER ===== */
+function switchLanguage(lang) {
+  // Update button states
+  const enBtn = document.getElementById('langEN');
+  const deBtn = document.getElementById('langDE');
+  
+  if (lang === 'de') {
+    deBtn.style.background = 'rgba(160, 120, 200, 0.1)';
+    deBtn.style.color = '#a078c8';
+    deBtn.style.borderColor = 'rgba(160, 120, 200, 0.2)';
+    
+    enBtn.style.background = 'white';
+    enBtn.style.color = '#666';
+    enBtn.style.borderColor = '#e0e0e0';
+  } else {
+    enBtn.style.background = 'rgba(160, 120, 200, 0.1)';
+    enBtn.style.color = '#a078c8';
+    enBtn.style.borderColor = 'rgba(160, 120, 200, 0.2)';
+    
+    deBtn.style.background = 'white';
+    deBtn.style.color = '#666';
+    deBtn.style.borderColor = '#e0e0e0';
+  }
+  
+  console.log('Language switched to:', lang);
+  // Here you can add actual language switching logic later
+}
+
+// Make language switcher globally available
+window.switchLanguage = switchLanguage;
+
 // Calculator function for time savings
 function calculateSavings() {
   const tasksPerDay = document.getElementById('tasksPerDay').value;
