@@ -223,6 +223,7 @@ body.is-dark .header-logo {
   display: flex;
   align-items: center;
   justify-content: center;
+  right: 0; /* No right margin for hero */
 }
 
 .hero-text-container {

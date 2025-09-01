@@ -134,7 +134,7 @@ body {
   right: 0;
   z-index: 1000;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   transition: background-color .35s ease, border-color .35s ease;
 }
@@ -197,11 +197,11 @@ body.is-dark .header-logo {
 /* Vollbild-Slides */
 #slides {
   position: relative; 
-  z-index: 1; /* Über Canvas */
+  z-index: 10; /* Über Canvas */
   width: 100vw; 
   height: 100vh;
   padding-top: 56px; /* Space for header */
-  opacity: 0; /* Initially hidden until loading complete */
+  opacity: 1; /* Sichtbar */
   transition: opacity 0.5s ease;
 }
 
@@ -210,27 +210,43 @@ body.is-dark .header-logo {
 }
 
 .slide {
-  position: absolute; 
-  inset: 0;
-  top: 0; /* Kein extra top - padding-top im #slides reicht */
-  right: 80px; /* Platz für Pfeile lassen */
-  display: grid; 
-  place-items: center;
+  position: absolute !important; 
+  width: 100% !important;
+  height: 100vh !important;
+  top: 0 !important;
+  right: 50px !important; /* Reduced space for smaller arrows */
+  left: 0 !important;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+.slide.hero {
+  right: 0 !important; /* Hero bekommt keinen rechten Abstand */
 }
 
 /* Hero Section */
 .hero {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  right: 0 !important; /* No right margin for hero */
+  background: transparent !important;
+  width: 100% !important;
+  height: 100vh !important;
 }
 
 .hero-text-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 20px !important;
+  position: relative !important;
+  z-index: 9999 !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .hero-main-text {
@@ -242,7 +258,7 @@ body.is-dark .header-logo {
   max-width: 750px;
   text-align: center;
   position: relative;
-  z-index: 5;
+  z-index: 100;
 }
 
 
@@ -490,22 +506,22 @@ body.is-dark .header-logo {
 /* Navigation */
 .nav-vertical {
   position: fixed;
-  right: 24px;
+  right: 16px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   z-index: 2;
 }
 
 .nav-vertical .arrow {
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
   border: 1px solid #ddd;
   background: white;
   border-radius: 50%;
-  font-size: 12px;
+  font-size: 8px;
   color: #666;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -520,37 +536,16 @@ body.is-dark .header-logo {
   border-color: #a078c8;
 }
 
-/* ===== Einheitliche Page Transitions ===== */
+/* ===== SMOOTH SLIDE TRANSITIONS ===== */
 :root { 
-  --slide-shift: 46px; 
+  --slide-shift: 60px; 
 }
 
-.slide {
-  opacity: 0;
-  transform: translateY(var(--init-shift, 0));
-  pointer-events: none;
-  transition: opacity 420ms cubic-bezier(.22,.61,.36,1),
-              transform 420ms cubic-bezier(.22,.61,.36,1);
-}
-
-/* aktiver Slide */
+/* DISABLE ALL TRANSITIONS FOR NOW - DEBUG MODE */
 .slide.is-active {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-/* Der eintretende Slide startet je nach Richtung leicht versetzt */
-.slide.is-entering {
-  /* --dir wird in JS auf +1 (von unten) oder -1 (von oben) gesetzt */
-  --init-shift: calc(var(--dir, 1) * var(--slide-shift));
-}
-
-/* Der verlassende Slide bewegt sich entgegengesetzt aus dem View */
-.slide.is-leaving {
-  transform: translateY(calc(var(--dir, 1) * var(--slide-shift) * -1));
-  opacity: 0;
-  pointer-events: none;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -582,7 +577,7 @@ body.is-dark .header-logo {
 /* Large page number on the left */
 .interface-expertise-number-section {
   position: relative;
-  width: 180px;
+  width: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -789,7 +784,7 @@ body.is-dark .header-logo {
 /* Large page number on the left */
 .interface-innovation-number-section {
   position: relative;
-  width: 180px;
+  width: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -983,7 +978,7 @@ body.is-dark .header-logo {
 /* Large page number on the left */
 .vision-number-section {
   position: relative;
-  width: 180px;
+  width: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -992,7 +987,7 @@ body.is-dark .header-logo {
 }
 
 .large-page-number {
-  font-size: 5rem;
+  font-size: 3rem;
   font-weight: 300;
   color: #9a9a9a;
   letter-spacing: -0.02em;
@@ -1132,7 +1127,7 @@ body.is-dark .header-logo {
 /* Large page number on the left */
 .modern-design-number-section {
   position: relative;
-  width: 180px;
+  width: 100px;
   display: flex;
   align-items: center;
   justify-content: center;

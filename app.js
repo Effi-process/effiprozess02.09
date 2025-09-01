@@ -326,9 +326,17 @@ function bindProblemsControls() {
 class OrganicBubbleAnimation {
   constructor() {
     this.canvas = document.getElementById('dotAnimation');
-    if (!this.canvas) return;
+    if (!this.canvas) {
+      console.warn('Canvas element not found');
+      return;
+    }
 
     this.ctx = this.canvas.getContext('2d');
+    if (!this.ctx) {
+      console.warn('Canvas context not available');
+      return;
+    }
+
     this.dots = [];
     this.time = 0;
     this.COLOR = { r: 160, g: 120, b: 200 };
@@ -336,7 +344,13 @@ class OrganicBubbleAnimation {
     this.setupCanvas();
     this.createOrganicBubble();
     this.bindEvents();
-    setTimeout(() => this.animate(), 100);
+    
+    // Start animation with a small delay to ensure everything is ready
+    setTimeout(() => {
+      if (this.canvas && this.ctx) {
+        this.animate();
+      }
+    }, 100);
   }
 
   setupCanvas() {
@@ -483,43 +497,51 @@ class OrganicBubbleAnimation {
   }
 
   animate = () => {
-    this.time += 16;
+    // Ensure animation continues even if there are errors
+    try {
+      this.time += 16;
 
-
-    if (currentSlide === idx.hero) {
-      this.updateBubbleBreathing();
-    } else {
-      // Alle anderen Seiten: Animation komplett ausblenden
-      for (const dot of this.dots) {
-        dot.targetOpacity = 0;
-      }
-    }
-
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    // Nur animieren und zeichnen wenn auf Hero Seite
-    if (currentSlide === idx.hero) {
-      for (const dot of this.dots) {
-        dot.x += (dot.targetX - dot.x) * 0.08;
-        dot.y += (dot.targetY - dot.y) * 0.08;
-        dot.size += (dot.targetSize - dot.size) * 0.12;
-        dot.opacity += (dot.targetOpacity - dot.opacity) * 0.06;
-
-        if (currentSlide === idx.hero) {
-          const jitter = 0.15;
-          dot.x += (Math.random() - 0.5) * jitter;
-          dot.y += (Math.random() - 0.5) * jitter;
-        }
-
-        if (dot.opacity > 0.01) {
-          this.ctx.fillStyle = `rgba(${this.COLOR.r}, ${this.COLOR.g}, ${this.COLOR.b}, ${dot.opacity})`;
-          this.ctx.beginPath();
-          this.ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-          this.ctx.fill();
+      if (currentSlide === idx.hero) {
+        this.updateBubbleBreathing();
+      } else {
+        // Alle anderen Seiten: Animation komplett ausblenden
+        for (const dot of this.dots) {
+          dot.targetOpacity = 0;
         }
       }
+
+      // Always clear the canvas
+      if (this.ctx) {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      }
+
+      // Nur animieren und zeichnen wenn auf Hero Seite
+      if (currentSlide === idx.hero) {
+        for (const dot of this.dots) {
+          dot.x += (dot.targetX - dot.x) * 0.08;
+          dot.y += (dot.targetY - dot.y) * 0.08;
+          dot.size += (dot.targetSize - dot.size) * 0.12;
+          dot.opacity += (dot.targetOpacity - dot.opacity) * 0.06;
+
+          if (currentSlide === idx.hero) {
+            const jitter = 0.15;
+            dot.x += (Math.random() - 0.5) * jitter;
+            dot.y += (Math.random() - 0.5) * jitter;
+          }
+
+          if (dot.opacity > 0.01 && this.ctx) {
+            this.ctx.fillStyle = `rgba(${this.COLOR.r}, ${this.COLOR.g}, ${this.COLOR.b}, ${dot.opacity})`;
+            this.ctx.beginPath();
+            this.ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+            this.ctx.fill();
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('Animation error:', error);
     }
 
+    // Always continue the animation loop
     requestAnimationFrame(this.animate);
   }
 }

@@ -1,125 +1,3 @@
-# EFFIPROCESS - COMPLETE NEXT.JS 15.5.2 CODE
-
-## Project Setup
-
-### package.json
-```json
-{
-  "name": "effiprocess-nextjs",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.23.12",
-    "next": "15.5.2",
-    "react": "19.1.0",
-    "react-dom": "19.1.0"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.5.2",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
-}
-```
-
-### next.config.ts
-```typescript
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  output: 'export',
-  trailingSlash: true,
-  images: {
-    unoptimized: true
-  },
-  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-  },
-};
-
-export default nextConfig;
-```
-
-### tsconfig.json
-```json
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
-}
-```
-
-## Core App Files
-
-### src/app/layout.tsx
-```typescript
-import type { Metadata } from "next";
-import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "Effiprocess",
-  description: "Modern websites with AI automation",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="de">
-      <body className="antialiased">
-        {children}
-      </body>
-    </html>
-  );
-}
-```
-
-### src/app/page.tsx
-```typescript
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -147,12 +25,13 @@ const slides = [
 ]
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false) // Kein Loading für Debug
   const [currentSlide, setCurrentSlide] = useState(0)
   const [direction, setDirection] = useState(1)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
+    // Loading sequence
     const timer = setTimeout(() => {
       setIsLoading(false)
     }, 3000)
@@ -268,6 +147,8 @@ export default function Home() {
   }
 
   const CurrentSlideComponent = slides[currentSlide].component
+  
+  // Debug logging entfernt
 
   return (
     <>
@@ -299,4 +180,3 @@ export default function Home() {
     </>
   )
 }
-```
